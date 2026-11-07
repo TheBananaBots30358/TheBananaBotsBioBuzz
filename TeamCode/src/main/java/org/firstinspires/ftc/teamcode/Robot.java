@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.mechanisms.Launcher;
  *
  * When a team adds a new mechanism, add it here.
  */
+@Disabled
 public class Robot {
     public final Drivetrain drivetrain = new Drivetrain();
     public final Intake intake = new Intake();
