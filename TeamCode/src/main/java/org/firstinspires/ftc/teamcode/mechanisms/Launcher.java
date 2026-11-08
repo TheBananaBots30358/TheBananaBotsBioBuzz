@@ -33,8 +33,8 @@ public class Launcher extends LinearOpMode{
         waitForStart();
         double NectarVelocity = 2160;
         double velocity_stepNectar = 20;
-        double PollenVelocity = -2160;
-        double velocity_stepPollen = -20;
+        double PollenVelocity = -1860;
+        double velocity_stepPollen = -1;
 
 
         while (opModeIsActive()){
