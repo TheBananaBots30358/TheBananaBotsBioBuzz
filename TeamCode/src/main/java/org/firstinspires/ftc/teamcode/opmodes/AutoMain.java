@@ -81,11 +81,12 @@ public class AutoMain extends OpMode {
 
         switch (state) {
             case DRIVE_TO_LAUNCH:
-                robot.pollenLauncher.spinUp();
+                //robot.pollenLauncher.spinUp();
                 if (!follower.isBusy()) {
                     setState(State.SPIN_UP);
                 }
                 break;
+
 
             case SPIN_UP:
                 if (robot.pollenLauncher.isReady()) {

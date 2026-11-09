@@ -28,23 +28,18 @@ public class LauncherTest extends OpMode {
 
     @Override
     public void loop() {
-        testLauncher(pollen, gamepad1.right_bumper, gamepad1.a);
-        testLauncher(nectar, gamepad1.left_bumper, gamepad1.b);
+        testLauncher(pollen, gamepad1.a);
+        testLauncher(nectar, gamepad1.b);
 
         pollen.addTelemetry(telemetry);
         nectar.addTelemetry(telemetry);
     }
 
-    private void testLauncher(Launcher launcher, boolean spinButton, boolean shootButton) {
-        if (spinButton) {
-            launcher.spinUp();
-            if (shootButton) {
-                launcher.shoot();
-            } else {
-                launcher.closeGate();
-            }
+    private void testLauncher(Launcher launcher, boolean shootButton) {
+        if (shootButton) {
+            launcher.shoot();
         } else {
-            launcher.stop();
+            launcher.closeGate();
         }
     }
 }

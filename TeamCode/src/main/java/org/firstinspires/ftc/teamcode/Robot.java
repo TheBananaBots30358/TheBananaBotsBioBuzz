@@ -24,8 +24,16 @@ public class Robot {
     public void init(HardwareMap hwMap) {
         drivetrain.init(hwMap);
         intake.init(hwMap);
+
         pollenLauncher.init(hwMap);
+        pollenLauncher.setFlywheelPID(20,0.2,0,0);
+        pollenLauncher.setVelocity(-1860);
+        pollenLauncher.setGatePositions(0.5,0); //Kevin to update values
+
         nectarLauncher.init(hwMap);
+        nectarLauncher.setFlywheelPID(20,0.2,0,0);
+        nectarLauncher.setVelocity(2160);
+        nectarLauncher.setGatePositions(0.57, 0.65);
     }
 
     public void stopAll() {
