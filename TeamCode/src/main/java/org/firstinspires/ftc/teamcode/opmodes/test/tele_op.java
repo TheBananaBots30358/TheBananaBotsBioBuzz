@@ -114,21 +114,6 @@ public class tele_op extends OpMode {
         } else {
             intake.setPower(0);
         }
-        if (gamepad2.right_trigger > 0.5) {
-            nectarGate.setPosition(NECTAR_RELEASE_POSITION);
-            Nectar.setVelocity(2160);
-        } else {
-            nectarGate.setPosition(NECTAR_BLOCK_POSITION);
-            Nectar.setVelocity(2160);
-        }
-
-        if (gamepad2.left_trigger > 0.5) {
-            pollenGate.setPosition(POLLEN_RELEASE_POSITION);
-            Pollen.setVelocity(1860);
-        } else {
-            pollenGate.setPosition(POLLEN_BLOCK_POSITION);
-            Pollen.setVelocity(1860);
-        }
 
         if (gamepad2.dpad_up) {
             Flower.setPosition(FLOWER_INTAKE_POSITION);
