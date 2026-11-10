@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.ConfigConstants;
 
 @TeleOp(name = "Mec BioBuzz StarterBot Teleop", group = "StarterBot")
 public class tele_op extends OpMode {
@@ -46,8 +47,8 @@ public class tele_op extends OpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "backLeft");
         rightBackDrive = hardwareMap.get(DcMotor.class, "backRight");
         intake = hardwareMap.get(DcMotor.class, "intake");
-        Nectar = hardwareMap.get(DcMotorEx.class,"Nectar");
-        Pollen = hardwareMap.get(DcMotorEx.class,"Pollen");
+        Nectar = hardwareMap.get(DcMotorEx.class, ConfigConstants.NAMES.NECTAR_LAUNCHER);
+        Pollen = hardwareMap.get(DcMotorEx.class, ConfigConstants.NAMES.POLLEN_LAUNCHER);
         nectarGate = hardwareMap.get(Servo.class, "nectarGate");
         pollenGate = hardwareMap.get(Servo.class,"pollenGate");
         Flower = hardwareMap.get(Servo.class, "Flower");
