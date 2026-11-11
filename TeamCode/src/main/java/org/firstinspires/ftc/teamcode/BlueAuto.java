@@ -54,7 +54,16 @@ public void init() {
     pollenGate.setPosition();
 
 }
+    @Override
+    public void start() {
 
+        step = 0;
+        timer.reset();
+
+        follower.follow(
+                line(start, shoot).constant(start)
+        );
+    }
 
 
 }
