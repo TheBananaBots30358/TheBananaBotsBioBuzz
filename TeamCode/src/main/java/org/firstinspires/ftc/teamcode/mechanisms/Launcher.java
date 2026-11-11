@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.ConfigConstants;
  */
 public class Launcher {
     // TODO: Tune these numbers on the real robot.
-    private static final double VELOCITY_TOLERANCE = 20;   // "close enough" to shoot
+    private static final double VELOCITY_TOLERANCE = 60;   // "close enough" to shoot
 
     private final String name;
     private final String motorName;
@@ -28,8 +28,8 @@ public class Launcher {
     private DcMotorEx flywheel;
     private Servo gate;
     private double target_velocity;
-    private double gate_open_position;
-    private double gate_closed_position;
+    public double gate_open_position;
+    public double gate_closed_position;
 
     /**
      * @param name      shown on telemetry, e.g. "Pollen"
@@ -96,6 +96,8 @@ public class Launcher {
     public void addTelemetry(Telemetry telemetry) {
         telemetry.addData(name + " velocity", "%.0f / %.0f", flywheel.getVelocity(), target_velocity);
         telemetry.addData(name + " ready", isReady());
-        telemetry.addData(name + " Gate Open Position: "," %.0f",gate_open_position,", Close Position:",gate_closed_position, ", Current position: ",gate.getPosition());
+        telemetry.addData(name + " Gate Open Position: "," %.2f", gate_open_position);
+        telemetry.addData(name + " Gate Close Position: %.2f",gate_closed_position);
+        telemetry.addData(name + " Gate current position: %.2f ",gate.getPosition());
     }
 }

@@ -28,8 +28,8 @@ public class LauncherWithPID extends LinearOpMode{
     private double PollenP_INCREMENT = 1;
     private double PollenI_INCREMENT =0.01;
     public void runOpMode(){
-        Nectar = hardwareMap.get(DcMotorEx.class, "Nectar");
-        Pollen = hardwareMap.get(DcMotorEx.class, "Pollen");
+        Nectar = hardwareMap.get(DcMotorEx.class, "nectarLauncher");
+        Pollen = hardwareMap.get(DcMotorEx.class, "pollenLauncher");
         nectarGate = hardwareMap.get(Servo.class, "nectarGate");
         Nectar.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(NectarP,NectarI,0,0));
         Pollen.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(PollenP,PollenI,0,0));
