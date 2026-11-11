@@ -27,6 +27,7 @@ public class ForesightTuner extends Procedure {
         super("Foresight Tuner", "A procedure for tuning the Foresight Algorithm.");
         this.localizerFunction = localizerFunction;
         this.drivetrainFunction = drivetrainFunction;
+
     }
 
     @Override
