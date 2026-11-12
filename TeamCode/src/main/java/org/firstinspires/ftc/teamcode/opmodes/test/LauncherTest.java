@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.mechanisms.Launcher;
  * Tests only the two launchers, so the launcher team can work without the other mechanisms.
  *
  * Gamepad 1:
- *   right bumper  spin up pollen (hold), A = shoot pollen
- *   left bumper   spin up nectar (hold), B = shoot nectar
+ *    A = shoot pollen
+ *    B = shoot nectar
  */
 @TeleOp(name = "Test: Launcher", group = "Test")
 public class LauncherTest extends OpMode {
@@ -23,28 +23,30 @@ public class LauncherTest extends OpMode {
     @Override
     public void init() {
         pollen.init(hardwareMap);
+        pollen.setFlywheelPID(20,0.2,0,0);
+        pollen.setVelocity(-1860);
+        pollen.setGatePositions(0.5,0);
+
         nectar.init(hardwareMap);
+        nectar.setFlywheelPID(20,0.2,0,0);
+        nectar.setVelocity(2160);
+        nectar.setGatePositions(0.57, 0.65);
     }
 
     @Override
     public void loop() {
-        testLauncher(pollen, gamepad1.right_bumper, gamepad1.a);
-        testLauncher(nectar, gamepad1.left_bumper, gamepad1.b);
+        testLauncher(pollen, gamepad1.a);
+        testLauncher(nectar, gamepad1.b);
 
         pollen.addTelemetry(telemetry);
         nectar.addTelemetry(telemetry);
     }
 
-    private void testLauncher(Launcher launcher, boolean spinButton, boolean shootButton) {
-        if (spinButton) {
-            launcher.spinUp();
-            if (shootButton) {
-                launcher.shoot();
-            } else {
-                launcher.closeGate();
-            }
+    private void testLauncher(Launcher launcher, boolean shootButton) {
+        if (shootButton) {
+            launcher.openGate();
         } else {
-            launcher.stop();
+            launcher.closeGate();
         }
     }
 }

@@ -27,14 +27,14 @@ public class TeleOpMain extends OpMode {
     // 0.4 means 40% speed, for lining up precisely. Lower = slower, higher = faster (max 1.0).
     private static final double SLOW_MODE_SCALE = 0.4;
 
-    private final Robot robot = new Robot();
+    private final Robot bobot = new Robot();
 
     // Remembers if Y was held last loop, so one press toggles the flower only once
     private boolean flowerButtonWasDown = false;
 
     @Override
     public void init() {
-        robot.init(hardwareMap);
+        bobot.init(hardwareMap);
         telemetry.addLine("Ready");
     }
 
@@ -42,15 +42,15 @@ public class TeleOpMain extends OpMode {
     public void loop() {
         driveControls();
         intakeControls();
-        launcherControls(robot.pollenLauncher, gamepad2.right_bumper, gamepad2.a);
-        launcherControls(robot.nectarLauncher, gamepad2.left_bumper, gamepad2.b);
+        launcherControls(bobot.pollenLauncher, gamepad2.a);
+        launcherControls(bobot.nectarLauncher, gamepad2.b);
 
-        robot.addTelemetry(telemetry);
+        bobot.addTelemetry(telemetry);
     }
 
     @Override
     public void stop() {
-        robot.stopAll();
+        bobot.stopAll();
     }
 
     private void driveControls() {
@@ -63,34 +63,29 @@ public class TeleOpMain extends OpMode {
             right *= SLOW_MODE_SCALE;
             rotate *= SLOW_MODE_SCALE;
         }
-        robot.drivetrain.drive(forward, right, rotate);
+        bobot.drivetrain.drive(forward, right, rotate);
     }
 
     private void intakeControls() {
         if (gamepad2.right_trigger > 0.5) {
-            robot.intake.start();
+            bobot.intake.start();
         } else if (gamepad2.left_trigger > 0.5) {
-            robot.intake.reverse();
+            bobot.intake.reverse();
         } else {
-            robot.intake.stop();
+            bobot.intake.stop();
         }
 
         if (gamepad2.y && !flowerButtonWasDown) {
-            robot.intake.toggleFlower();
+            bobot.intake.toggleFlower();
         }
         flowerButtonWasDown = gamepad2.y;
     }
 
-    private void launcherControls(Launcher launcher, boolean spinButton, boolean shootButton) {
-        if (spinButton) {
-            launcher.spinUp();
-            if (shootButton) {
-                launcher.shoot();
-            } else {
-                launcher.closeGate();
-            }
+    private void launcherControls(Launcher launcher, boolean shootButton) {
+        if (shootButton) {
+            launcher.shoot();
         } else {
-            launcher.stop();
+            launcher.closeGate();
         }
     }
 }
