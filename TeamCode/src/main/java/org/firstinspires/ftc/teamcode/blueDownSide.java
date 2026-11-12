@@ -20,7 +20,6 @@ public class blueDownSide extends OpMode {
         LAUNCH,
         DONE
     }
-
     private PathState pathState;
 
     private final PoseFactory poseFactory = PoseFactory.degrees();
