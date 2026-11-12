@@ -19,8 +19,8 @@ public class Blue_Auto_FrontOfHive extends OpMode {
 
     int step = 0;
 
-    final double TARGET_RPM = 1860.0;
-    final double MIN_RPM = 1840.0;
+    final double TARGET_RPM = 1860.0; //ideal launcher speed
+    final double MIN_RPM = 1845.0; // pollen gate opens when it reaches this speed
     final double TICKS_PER_REV = 28.0;
 
     final double GATE_OPEN = 0.5;
@@ -64,7 +64,7 @@ public class Blue_Auto_FrontOfHive extends OpMode {
                 Math.abs(pollenLauncher.getVelocity())
                         * 60.0 / TICKS_PER_REV;
 
-        // STEP 0: Wait for at least 1840 RPM
+        // STEP 0: Wait for at least 1845 RPM
         if (step == 0) {
 
             if (rpm >= MIN_RPM) {
