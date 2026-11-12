@@ -24,6 +24,7 @@ public class IntakeTest extends OpMode {
 
     @Override
     public void loop() {
+        intake.tuneFloInt(gamepad2.dpad_up, gamepad2.dpad_down, telemetry);
         if (gamepad1.a) {
             intake.start();
         } else if (gamepad1.b) {

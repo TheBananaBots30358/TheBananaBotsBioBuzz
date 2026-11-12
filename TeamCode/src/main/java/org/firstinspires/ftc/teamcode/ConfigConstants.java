@@ -15,7 +15,8 @@ public final class ConfigConstants {
         // Servos
         public static final String POLLEN_GATE = "pollenGate";
         public static final String NECTAR_GATE = "nectarGate";
-        public static final String FLOWER_INTAKE = "flower";
+        public static final String FLOWER_INTAKE = "FloInt" +
+                "\b";
 
         // Odometry
         public static final String ODOMETRY_COMPUTER = "pinpoint";

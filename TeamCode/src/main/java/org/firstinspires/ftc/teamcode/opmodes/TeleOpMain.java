@@ -45,6 +45,7 @@ public class TeleOpMain extends OpMode {
         launcherControls(robot.pollenLauncher, gamepad2.right_bumper, gamepad2.a);
         launcherControls(robot.nectarLauncher, gamepad2.left_bumper, gamepad2.b);
 
+
         robot.addTelemetry(telemetry);
     }
 
@@ -67,6 +68,7 @@ public class TeleOpMain extends OpMode {
     }
 
     private void intakeControls() {
+        //INTAKE
         if (gamepad2.right_trigger > 0.5) {
             robot.intake.start();
         } else if (gamepad2.left_trigger > 0.5) {
@@ -74,11 +76,13 @@ public class TeleOpMain extends OpMode {
         } else {
             robot.intake.stop();
         }
-
+        //FLOINT
         if (gamepad2.y && !flowerButtonWasDown) {
             robot.intake.toggleFlower();
         }
         flowerButtonWasDown = gamepad2.y;
+
+        robot.intake.tuneFloInt(gamepad2.dpad_up, gamepad2.dpad_down, telemetry);
     }
 
     private void launcherControls(Launcher launcher, boolean spinButton, boolean shootButton) {
