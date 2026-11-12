@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.ConfigConstants;
  */
 public class Intake {
     // TODO: Tune these numbers on the real robot.
-    private static final double INTAKE_POWER = 1.0;
+    private static final double INTAKE_POWER = .6;
     private static final double FLOWER_UP_POSITION = 0.5;
     private static final double FLOWER_DOWN_POSITION = 0.0;
 
