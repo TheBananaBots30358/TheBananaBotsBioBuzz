@@ -88,4 +88,11 @@ public class TeleOpMain extends OpMode {
             launcher.closeGate();
         }
     }
+    private void openGate(Launcher launcher, boolean shootButton) {
+        if (shootButton) {
+            launcher.shoot();
+        } else {
+            launcher.closeGate();
+        }
+    }
 }
