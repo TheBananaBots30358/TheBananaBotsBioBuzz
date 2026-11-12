@@ -27,14 +27,14 @@ public class TeleOpMain extends OpMode {
     // 0.4 means 40% speed, for lining up precisely. Lower = slower, higher = faster (max 1.0).
     private static final double SLOW_MODE_SCALE = 0.4;
 
-    private final Robot bobot = new Robot();
+    private final Robot robot = new Robot();
 
     // Remembers if Y was held last loop, so one press toggles the flower only once
     private boolean flowerButtonWasDown = false;
 
     @Override
     public void init() {
-        bobot.init(hardwareMap);
+        robot.init(hardwareMap);
         telemetry.addLine("Ready");
     }
 
@@ -42,15 +42,17 @@ public class TeleOpMain extends OpMode {
     public void loop() {
         driveControls();
         intakeControls();
-        launcherControls(bobot.pollenLauncher, gamepad2.a);
-        launcherControls(bobot.nectarLauncher, gamepad2.b);
+        launcherControls(robot.pollenLauncher, gamepad2.a);
+        launcherControls(robot.nectarLauncher, gamepad2.b);
 
-        bobot.addTelemetry(telemetry);
+
+
+        robot.addTelemetry(telemetry);
     }
 
     @Override
     public void stop() {
-        bobot.stopAll();
+        robot.stopAll();
     }
 
     private void driveControls() {
@@ -63,22 +65,25 @@ public class TeleOpMain extends OpMode {
             right *= SLOW_MODE_SCALE;
             rotate *= SLOW_MODE_SCALE;
         }
-        bobot.drivetrain.drive(forward, right, rotate);
+        robot.drivetrain.drive(forward, right, rotate);
     }
 
     private void intakeControls() {
+        //INTAKE
         if (gamepad2.right_trigger > 0.5) {
-            bobot.intake.start();
+            robot.intake.start();
         } else if (gamepad2.left_trigger > 0.5) {
-            bobot.intake.reverse();
+            robot.intake.reverse();
         } else {
-            bobot.intake.stop();
+            robot.intake.stop();
         }
-
+        //FLOINT
         if (gamepad2.y && !flowerButtonWasDown) {
-            bobot.intake.toggleFlower();
+            robot.intake.toggleFlower();
         }
         flowerButtonWasDown = gamepad2.y;
+
+        robot.intake.tuneFloInt(gamepad2.dpad_up, gamepad2.dpad_down, telemetry);
     }
 
     private void launcherControls(Launcher launcher, boolean shootButton) {

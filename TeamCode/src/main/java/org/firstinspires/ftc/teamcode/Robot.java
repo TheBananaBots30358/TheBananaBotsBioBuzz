@@ -28,12 +28,12 @@ public class Robot {
         pollenLauncher.init(hwMap);
         pollenLauncher.setFlywheelPID(20,0.2,0,0);
         pollenLauncher.setVelocity(-1860);
-        pollenLauncher.setGatePositions(0.5,0); //Kevin to update values
+        pollenLauncher.setGatePositions(0.48,0.45);
 
         nectarLauncher.init(hwMap);
         nectarLauncher.setFlywheelPID(20,0.2,0,0);
         nectarLauncher.setVelocity(2160);
-        nectarLauncher.setGatePositions(0.57, 0.65);
+        nectarLauncher.setGatePositions(0, 0.5);
     }
 
     public void stopAll() {

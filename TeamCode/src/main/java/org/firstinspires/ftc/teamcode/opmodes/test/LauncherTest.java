@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.opmodes.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ConfigConstants;
 import org.firstinspires.ftc.teamcode.mechanisms.Launcher;
 
@@ -19,18 +21,18 @@ public class LauncherTest extends OpMode {
             ConfigConstants.NAMES.POLLEN_LAUNCHER, ConfigConstants.NAMES.POLLEN_GATE);
     private final Launcher nectar = new Launcher("Nectar",
             ConfigConstants.NAMES.NECTAR_LAUNCHER, ConfigConstants.NAMES.NECTAR_GATE);
-
+    ElapsedTime debounce = new ElapsedTime();
     @Override
     public void init() {
         pollen.init(hardwareMap);
-        pollen.setFlywheelPID(20,0.2,0,0);
+        pollen.setFlywheelPID(60,0.2,0,0);
         pollen.setVelocity(-1860);
-        pollen.setGatePositions(0.5,0);
+        pollen.setGatePositions(0.48,0.45);
 
         nectar.init(hardwareMap);
-        nectar.setFlywheelPID(20,0.2,0,0);
+        nectar.setFlywheelPID(60,0.2,0,0);
         nectar.setVelocity(2160);
-        nectar.setGatePositions(0.57, 0.65);
+        nectar.setGatePositions(0, 0.5);
     }
 
     @Override
