@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ConfigConstants;
@@ -30,6 +31,7 @@ public class Launcher {
     private double target_velocity;
     public double gate_open_position;
     public double gate_closed_position;
+    ElapsedTime debounce = new ElapsedTime();
 
     /**
      * @param name      shown on telemetry, e.g. "Pollen"
@@ -92,7 +94,17 @@ public class Launcher {
     public void closeGate() {
         gate.setPosition(gate_closed_position);
     }
-
+    public void tuneGates(boolean button1, boolean button2, Telemetry telemetry){
+        telemetry.addData("FloIntPos", gate.getPosition());
+        if(button1 && debounce.milliseconds() > 200){
+            gate.setPosition(gate.getPosition() + .01);
+            debounce.reset();
+        } else if (button2 && debounce.milliseconds() > 200) {
+            gate.setPosition(gate.getPosition() - .01);
+            debounce.reset();
+        }
+        telemetry.update();
+    }
     public void addTelemetry(Telemetry telemetry) {
         telemetry.addData(name + " velocity", "%.0f / %.0f", flywheel.getVelocity(), target_velocity);
         telemetry.addData(name + " ready", isReady());
