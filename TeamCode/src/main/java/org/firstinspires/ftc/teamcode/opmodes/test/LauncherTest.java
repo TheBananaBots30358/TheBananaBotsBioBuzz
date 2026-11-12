@@ -25,7 +25,7 @@ public class LauncherTest extends OpMode {
         pollen.init(hardwareMap);
         pollen.setFlywheelPID(20,0.2,0,0);
         pollen.setVelocity(-1860);
-        pollen.setGatePositions(0.5,0); //Kevin to update values
+        pollen.setGatePositions(0.5,0);
 
         nectar.init(hardwareMap);
         nectar.setFlywheelPID(20,0.2,0,0);
