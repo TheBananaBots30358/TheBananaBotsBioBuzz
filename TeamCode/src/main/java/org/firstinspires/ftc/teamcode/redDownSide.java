@@ -27,10 +27,12 @@ public class redDownSide extends OpMode {
 
     PathState pathState;
 
-    private final Pose start = new Pose(56, 8, Math.toRadians(90));
-    private final Pose intake = new Pose(18.0317, 47.225, Math.toRadians(179.5528));
-    private final Pose control1 = new Pose(55.7261, 17.199, Math.toRadians(0));
-    private final Pose control2 = new Pose(34.7374, 47.0946, Math.toRadians(0));
+    private final Pose start = new Pose(59.59, 132.01, Math.toRadians(90));
+    private final Pose intake = new Pose(46.73, 112.69, Math.toRadians(179.5528));
+    private final Pose control1 = new Pose(61.88, 108.92, Math.toRadians(0));
+    private final Pose intake1 = new Pose(46.73, 125.43, Math.toRadians(179.5528));
+    private final Pose control2 = new Pose(56.68, 122.45, Math.toRadians(0));
+
 
     private Path pathChain = Paths.path(pathToIntake(), pathToShoot());
 
@@ -48,10 +50,10 @@ public class redDownSide extends OpMode {
     }
 
     private Path pathToIntake(){
-        return curve(start, control1, control2, intake);
+        return curve(start, control1, intake);
     }
     private Path pathToShoot(){
-        return curve(intake, control2, control1, start);
+        return curve(intake1, control2, start);
     }
     private void setPathState(PathState state){
         pathState = state;
