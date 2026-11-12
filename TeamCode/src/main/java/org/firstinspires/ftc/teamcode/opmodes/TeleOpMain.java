@@ -42,8 +42,8 @@ public class TeleOpMain extends OpMode {
     public void loop() {
         driveControls();
         intakeControls();
-        launcherControls(robot.pollenLauncher, gamepad2.right_bumper, gamepad2.a);
-        launcherControls(robot.nectarLauncher, gamepad2.left_bumper, gamepad2.b);
+        launcherControls(robot.pollenLauncher, gamepad2.a);
+        launcherControls(robot.nectarLauncher, gamepad2.b);
 
 
         robot.addTelemetry(telemetry);
@@ -85,16 +85,11 @@ public class TeleOpMain extends OpMode {
         robot.intake.tuneFloInt(gamepad2.dpad_up, gamepad2.dpad_down, telemetry);
     }
 
-    private void launcherControls(Launcher launcher, boolean spinButton, boolean shootButton) {
-        if (spinButton) {
-            launcher.spinUp();
-            if (shootButton) {
-                launcher.shoot();
-            } else {
-                launcher.closeGate();
-            }
+    private void launcherControls(Launcher launcher, boolean shootButton) {
+        if (shootButton) {
+            launcher.shoot();
         } else {
-            launcher.stop();
+            launcher.closeGate();
         }
     }
 }
