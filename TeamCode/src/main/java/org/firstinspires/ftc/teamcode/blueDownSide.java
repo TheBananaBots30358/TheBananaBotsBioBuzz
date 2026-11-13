@@ -42,13 +42,18 @@ public class blueDownSide extends OpMode {
         robot.init(hardwareMap);
         follower = Constants.create(hardwareMap);
         follower.setPose(start);
+
+        robot.pollenLauncher.stop();
+        robot.pollenLauncher.closeGate();
     }
+
     @Override
     public void start() {
         if (follower == null) {
             return;}
         waitLoops = 0;
         pathState = PathState.SPIN_UP;
+        robot.pollenLauncher.setVelocity(-1860);
     }
     @Override
     public void loop() {
@@ -56,10 +61,8 @@ public class blueDownSide extends OpMode {
         switch (pathState) {
             case SPIN_UP:
                 robot.pollenLauncher.setVelocity(-1860);
-                robot.nectarLauncher.setVelocity(2160);
                 if (robot.pollenLauncher.isReady()) {
                     robot.pollenLauncher.openGate();
-                    robot.nectarLauncher.openGate();
                     waitLoops = 0;
                     pathState = PathState.SHOOT;
                 }
@@ -67,11 +70,9 @@ public class blueDownSide extends OpMode {
 
             case SHOOT:
                 robot.pollenLauncher.setVelocity(-1860);
-                robot.nectarLauncher.setVelocity(2160);
                 waitLoops++;
-                if (waitLoops > 40) {
-                    robot.pollenLauncher.stop();
-                    robot.nectarLauncher.stop();
+                if (waitLoops > 200) {
+                    robot.pollenLauncher.closeGate();
                     robot.intake.toggleFlower();
                     robot.intake.start();
                     follower.follow(pathToFlower());
@@ -93,7 +94,6 @@ public class blueDownSide extends OpMode {
                 break;
             case RETURN_TO_LAUNCH:
                 robot.pollenLauncher.setVelocity(-1860);
-                robot.nectarLauncher.setVelocity(2160);
                 if (!follower.isBusy()) {
                     waitLoops = 0;
                     pathState = PathState.LAUNCH;
@@ -102,20 +102,16 @@ public class blueDownSide extends OpMode {
 
             case LAUNCH:
                 robot.pollenLauncher.setVelocity(-1860);
-                robot.nectarLauncher.setVelocity(2160);
                 if (robot.pollenLauncher.isReady()) {
                     robot.pollenLauncher.openGate();
-                    robot.nectarLauncher.openGate();
                     waitLoops++;
                 }
-                if (waitLoops > 40) {
-                    robot.pollenLauncher.stop();
-                    robot.nectarLauncher.stop();
+                if (waitLoops > 200) {
+                    robot.pollenLauncher.closeGate();
                     pathState = PathState.DONE;
                 }
                 break;
             case DONE:
-                robot.stopAll();
                 break;
         }
         telemetry.addData("state", pathState);
