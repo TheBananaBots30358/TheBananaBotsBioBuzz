@@ -37,3 +37,26 @@ dependencies {
     implementation("dev.frozenmilk.sinister:Sloth:0.3.2")
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
 }
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+        maven { url = "https://repo.dairy.foundation/releases" }
+    }
+    dependencies {
+        // Match the version number with the Sloth dependency below
+        classpath "dev.frozenmilk:Load:0.3.2"
+    }
+}
+
+// Add this directly below your existing 'apply plugin:' lines
+apply plugin: 'dev.frozenmilk.sinister.sloth.load'
+
+repositories {
+    maven { url = "https://repo.dairy.foundation/releases" }
+}
+
+dependencies {
+    implementation("dev.frozenmilk.sinister:Sloth:0.3.2")
+}
+
