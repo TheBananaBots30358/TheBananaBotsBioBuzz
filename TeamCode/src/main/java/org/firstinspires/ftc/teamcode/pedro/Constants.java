@@ -15,8 +15,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.ConfigConstants;
 
 public class Constants {
+    //public var fl = ConfigConstants.NAMES.FRONT_LEFT_DRIVE_MOTOR;
     public static MecanumConfig drivetrainConfig = new MecanumConfig(c -> {
         c.frontLeftName.set("frontLeft");
         c.frontRightName.set("frontRight");
