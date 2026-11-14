@@ -20,8 +20,8 @@ public class Intake {
 
     ElapsedTime debounce = new ElapsedTime();
     private static final double INTAKE_POWER = 0.8;
-    private static final double FLOWER_UP_POSITION = .9;
-    private static final double FLOWER_DOWN_POSITION = 0.62;
+    private static final double FLOWER_UP_POSITION = 0.39;
+    private static final double FLOWER_DOWN_POSITION = 0.13;
 
     private DcMotor intakeMotor;
     private Servo FloInt;
@@ -32,7 +32,7 @@ public class Intake {
         FloInt = hwMap.get(Servo.class, ConfigConstants.NAMES.FLOWER_INTAKE);
 
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        raiseFlower();
+        FloInt.setPosition(.42);
     }
 
     /** Spin the rollers to pull pieces in. */
