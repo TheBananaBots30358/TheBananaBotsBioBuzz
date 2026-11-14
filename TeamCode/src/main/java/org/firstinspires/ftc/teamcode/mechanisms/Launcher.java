@@ -84,4 +84,8 @@ public class Launcher {
         telemetry.addData(name + " velocity", "%.0f / %.0f", flywheel.getVelocity(), TARGET_VELOCITY);
         telemetry.addData(name + " ready", isReady());
     }
+
+    public void setVelocity(int i) {
+        flywheel.setVelocity(i);
+    }
 }
