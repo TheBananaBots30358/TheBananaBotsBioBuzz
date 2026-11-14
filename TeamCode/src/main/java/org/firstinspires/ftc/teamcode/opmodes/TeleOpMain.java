@@ -40,6 +40,8 @@ public class TeleOpMain extends OpMode {
 
     @Override
     public void loop() {
+        robot.nectarLauncher.setVelocity(2160);
+        robot.pollenLauncher.setVelocity(-1940);
         driveControls();
         intakeControls();
         launcherControls(robot.pollenLauncher, gamepad2.a);
@@ -87,6 +89,13 @@ public class TeleOpMain extends OpMode {
     }
 
     private void launcherControls(Launcher launcher, boolean shootButton) {
+        if (shootButton) {
+            launcher.shoot();
+        } else {
+            launcher.closeGate();
+        }
+    }
+    private void openGate(Launcher launcher, boolean shootButton) {
         if (shootButton) {
             launcher.shoot();
         } else {
