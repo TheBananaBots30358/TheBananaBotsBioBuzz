@@ -54,8 +54,8 @@ public class UpSide extends OpMode {
     private final Robot robot = new Robot();
     private Follower follower;
     private final ElapsedTime stateTimer = new ElapsedTime();
-    private static final double POLLEN_TARGET_VELO = -1860;
-    private static final double NECTAR_TARGET_VELO = 2160;
+    private static final int POLLEN_TARGET_VELO = -1860;
+    private static final int NECTAR_TARGET_VELO = 2160;
     private static final double SHOOT_DURATION_SEC = 4.75;
     private static final double PATH_DONE_T = 0.96;
     private boolean actionTriggered = false;

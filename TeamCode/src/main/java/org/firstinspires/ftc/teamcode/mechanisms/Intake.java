@@ -17,10 +17,11 @@ import org.firstinspires.ftc.teamcode.ConfigConstants;
  */
 public class Intake {
     // TODO: Tune these numbers on the real robot.
-    private static final double INTAKE_POWER = .725;
-    private static final double FLOWER_UP_POSITION = 0.27;
-    private static final double FLOWER_DOWN_POSITION = 0;
+
     ElapsedTime debounce = new ElapsedTime();
+    private static final double INTAKE_POWER = 0.725;
+    private static final double FLOWER_UP_POSITION = 0.39;
+    private static final double FLOWER_DOWN_POSITION = 0.13;
 
     private DcMotor intakeMotor;
     private Servo FloInt;
@@ -57,6 +58,8 @@ public class Intake {
         FloInt.setPosition(FLOWER_DOWN_POSITION);
         flowerIsUp = false;
     }
+
+    /** If the FloInt is up, lower it. If it is down, raise it. */
     public void toggleFlower() {
         if (flowerIsUp) {
             lowerFlower();

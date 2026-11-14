@@ -19,8 +19,8 @@ public class Launcher {
     // TODO: Tune these numbers on the real robot.
     private static final double TARGET_VELOCITY = 1500;    // encoder ticks per second
     private static final double VELOCITY_TOLERANCE = 50;   // "close enough" to shoot
-    private static final double GATE_OPEN_POSITION = 0.5;
-    private static final double GATE_CLOSED_POSITION = 0.0;
+    private static double GATE_OPEN_POSITION = 0.5;
+    private static double GATE_CLOSED_POSITION = 0.0;
 
     private final String name;
     private final String motorName;
@@ -87,5 +87,14 @@ public class Launcher {
 
     public void setVelocity(int i) {
         flywheel.setVelocity(i);
+    }
+
+    public void setGatePositions(double up, double down) {
+        GATE_OPEN_POSITION = up;
+        GATE_CLOSED_POSITION = down;
+    }
+
+    public void setFlywheelPID(double p, double i, double d, double f) {
+        flywheel.setVelocityPIDFCoefficients(p, i, d, f);
     }
 }
