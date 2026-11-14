@@ -43,7 +43,7 @@ public class TeleOpMain extends OpMode {
         driveControls();
         intakeControls();
         launcherControls(robot.pollenLauncher, gamepad2.a);
-        launcherControls(robot.nectarLauncher, gamepad2.b);
+       launcherControls(robot.nectarLauncher, gamepad2.b);
 
 
 
@@ -56,15 +56,16 @@ public class TeleOpMain extends OpMode {
     }
 
     private void driveControls() {
-        double forward = -gamepad1.left_stick_y;
-        double right = gamepad1.left_stick_x;
-        double rotate = gamepad1.right_stick_x;
+        double forward = 0.6666666666666666 * Math.pow(-gamepad1.left_stick_y, 3) + 0.33333333333333 * -gamepad1.left_stick_y;
+        double right = 0.6666666666666666 * Math.pow(gamepad1.left_stick_x, 3) + 0.33333333333333 * gamepad1.left_stick_x;
+        double rotate = 0.6666666666666666 * Math.pow(gamepad1.right_stick_x, 3) + 0.33333333333333 * gamepad1.right_stick_x;
 
         if (gamepad1.left_bumper) {
             forward *= SLOW_MODE_SCALE;
             right *= SLOW_MODE_SCALE;
             rotate *= SLOW_MODE_SCALE;
         }
+
         robot.drivetrain.drive(forward, right, rotate);
     }
 

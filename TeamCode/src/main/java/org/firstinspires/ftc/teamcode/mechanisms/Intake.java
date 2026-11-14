@@ -20,8 +20,8 @@ public class Intake {
 
     ElapsedTime debounce = new ElapsedTime();
     private static final double INTAKE_POWER = 0.8;
-    private static final double FLOWER_UP_POSITION = .9;
-    private static final double FLOWER_DOWN_POSITION = 0.62;
+    private static final double FLOWER_UP_POSITION = .27;
+    private static final double FLOWER_DOWN_POSITION = 0;
 
     private DcMotor intakeMotor;
     private Servo FloInt;
