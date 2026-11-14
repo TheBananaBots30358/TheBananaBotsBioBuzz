@@ -24,15 +24,16 @@ public class LauncherTest extends OpMode {
     ElapsedTime debounce = new ElapsedTime();
     @Override
     public void init() {
+        // Set gate positions before init(), which closes the gate.
+        pollen.setGatePositions(0.48,0.45);
         pollen.init(hardwareMap);
         pollen.setFlywheelPID(60,0.2,0,0);
         pollen.setVelocity(-1920);
-        pollen.setGatePositions(0.48,0.45);
 
+        nectar.setGatePositions(0, 0.5);
         nectar.init(hardwareMap);
         nectar.setFlywheelPID(60,0.2,0,0);
         nectar.setVelocity(2160);
-        nectar.setGatePositions(0, 0.5);
     }
 
     @Override
