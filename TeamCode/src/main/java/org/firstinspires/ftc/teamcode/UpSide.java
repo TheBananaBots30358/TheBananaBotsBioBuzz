@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode;
+import static java.lang.Thread.sleep;
+
 import com.pedropathing.api.Paths;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
@@ -38,7 +40,7 @@ public class UpSide extends OpMode {
     private final Pose goalControl2 = poseFactory.of(56.4254, 118.7839, 0);
     private final Pose goalScorePose = poseFactory.of(64, 130, 90);
     private final Pose flowerIntakePose2 = poseFactory.of(48.0691, 118.3273, 90);
-    private final Pose flowerNudgePose2 = poseFactory.of(48.0691, 120.9554, 90);
+    private final Pose flowerNudgePose2 = poseFactory.of(48.0691, 122, 90);
     private final Pose parkPose = poseFactory.of(8.1779, 116.872, 0);
     private final Pose parkControlPose = poseFactory.of(49.2363, 111.4036, 0);
 
@@ -81,7 +83,7 @@ public class UpSide extends OpMode {
                 .linear(goalScorePose, flowerIntakePose2);
         flowerToGoalPath2 = Paths.line(flowerIntakePose2, goalScorePose)
                 .linear(flowerIntakePose2, goalScorePose);
-        parkPath = Paths.line(goalScorePose, parkPose)
+        parkPath = Paths.curve(goalScorePose, parkControlPose, parkPose)
                 .linear(goalScorePose, parkPose);
     }
 
@@ -189,7 +191,7 @@ public class UpSide extends OpMode {
                 }
                 break;
             case FLOWER_NUDGE_FWD_2:
-                if (!follower.following() || follower.completion() >= PATH_DONE_T) {
+                if ((!follower.following() || follower.completion() >= PATH_DONE_T) && stateTimer.milliseconds() <= 4000) {
                     follower.follow(flowerBackPath2);
                     stateTimer.reset();
                     pathState = PathState.FLOWER_NUDGE_BACK_2;
