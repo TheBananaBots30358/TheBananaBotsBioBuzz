@@ -43,9 +43,8 @@ public class TeleOpMain extends OpMode {
         driveControls();
         intakeControls();
         launcherControls(robot.pollenLauncher, gamepad2.a);
-       launcherControls(robot.nectarLauncher, gamepad2.b);
-
-
+        launcherControls(robot.nectarLauncher, gamepad2.b);
+      
 
         robot.addTelemetry(telemetry);
     }
