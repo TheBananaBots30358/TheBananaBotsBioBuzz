@@ -252,7 +252,8 @@ public class UpSide extends OpMode {
         robot.stopAll();
     }
     private boolean isAtShootingSpeed() {
-        return robot.pollenLauncher.isReady() && robot.nectarLauncher.isReady();
+        // Only pollen spins up for now. Add the nectar check back when spinUpLaunchers() spins nectar too.
+        return robot.pollenLauncher.isReady(); // && robot.nectarLauncher.isReady();
     }
     private void spinUpLaunchers() {
         robot.pollenLauncher.setVelocity(POLLEN_TARGET_VELO);

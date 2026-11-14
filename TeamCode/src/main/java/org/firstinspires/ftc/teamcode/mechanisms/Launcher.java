@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ConfigConstants;
 
 /**
  * One launcher: a flywheel motor that spins up to speed, and a gate servo that lets
@@ -17,10 +19,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 public class Launcher {
     // TODO: Tune these numbers on the real robot.
-    private static final double TARGET_VELOCITY = 1500;    // encoder ticks per second
-    private static final double VELOCITY_TOLERANCE = 50;   // "close enough" to shoot
-    private static double GATE_OPEN_POSITION = 0.5;
-    private static double GATE_CLOSED_POSITION = 0.0;
+    private static final double VELOCITY_TOLERANCE = 60;   // "close enough" to shoot
 
     private final String name;
     private final String motorName;
@@ -28,6 +27,9 @@ public class Launcher {
 
     private DcMotorEx flywheel;
     private Servo gate;
+    private double target_velocity;
+    public double gate_open_position;
+    public double gate_closed_position;
 
     /**
      * @param name      shown on telemetry, e.g. "Pollen"
@@ -40,17 +42,28 @@ public class Launcher {
         this.gateName = gateName;
     }
 
+    public void setFlywheelPID(double P, double I, double D, double F) {
+        flywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P,I,D,F));
+    }
+
     public void init(HardwareMap hwMap) {
         flywheel = hwMap.get(DcMotorEx.class, motorName);
         gate = hwMap.get(Servo.class, gateName);
 
         flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        closeGate();
     }
 
     /** Start the flywheel spinning toward its target speed. */
-    public void spinUp() {
-        flywheel.setVelocity(TARGET_VELOCITY);
+    public void setVelocity(double velocity) {
+        target_velocity = velocity;
+        flywheel.setVelocity(target_velocity);
+    }
+
+    public void setGatePositions(double open_position, double closed_position){
+        gate_open_position = open_position;
+        gate_closed_position = closed_position;
     }
 
     public void stop() {
@@ -60,7 +73,7 @@ public class Launcher {
 
     /** True when the flywheel is fast enough to shoot. */
     public boolean isReady() {
-        return Math.abs(flywheel.getVelocity() - TARGET_VELOCITY) < VELOCITY_TOLERANCE;
+        return Math.abs(flywheel.getVelocity() - target_velocity) < VELOCITY_TOLERANCE;
     }
 
     /** Opens the gate only if the flywheel is up to speed. Returns true if it opened. */
@@ -73,28 +86,18 @@ public class Launcher {
     }
 
     public void openGate() {
-        gate.setPosition(GATE_OPEN_POSITION);
+        gate.setPosition(gate_open_position);
     }
 
     public void closeGate() {
-        gate.setPosition(GATE_CLOSED_POSITION);
+        gate.setPosition(gate_closed_position);
     }
 
     public void addTelemetry(Telemetry telemetry) {
-        telemetry.addData(name + " velocity", "%.0f / %.0f", flywheel.getVelocity(), TARGET_VELOCITY);
+        telemetry.addData(name + " velocity", "%.0f / %.0f", flywheel.getVelocity(), target_velocity);
         telemetry.addData(name + " ready", isReady());
-    }
-
-    public void setVelocity(int i) {
-        flywheel.setVelocity(i);
-    }
-
-    public void setGatePositions(double up, double down) {
-        GATE_OPEN_POSITION = up;
-        GATE_CLOSED_POSITION = down;
-    }
-
-    public void setFlywheelPID(double p, double i, double d, double f) {
-        flywheel.setVelocityPIDFCoefficients(p, i, d, f);
+        telemetry.addData(name + " Gate Open Position: "," %.2f", gate_open_position);
+        telemetry.addData(name + " Gate Close Position: %.2f",gate_closed_position);
+        telemetry.addData(name + " Gate current position: %.2f ",gate.getPosition());
     }
 }

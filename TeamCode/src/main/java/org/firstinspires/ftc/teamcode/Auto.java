@@ -22,7 +22,8 @@ public class Auto extends OpMode {
     public enum PathState {
         SHOOT,
         MOVETOINTAKE,
-        LAUNCH
+        LAUNCH,
+        DONE
     }
 
     PathState pathState;
@@ -37,14 +38,52 @@ public class Auto extends OpMode {
     @Override
     public void init() {
         follower = Constants.create(hardwareMap);
+        follower.setPose(start);
         pathState = PathState.SHOOT;
         pathTimer = new Timer();
         opModeTimer = new Timer();
     }
 
     @Override
-    public void loop() {
+    public void start() {
+        opModeTimer.reset();
+        setPathState(PathState.SHOOT);
+    }
 
+    // TODO: Add the launcher and intake actions. For now this only drives the paths.
+    @Override
+    public void loop() {
+        follower.update();
+
+        switch (pathState) {
+            case SHOOT:
+                // Shoot the preloaded pieces here, then drive to the intake.
+                follower.follow(pathToIntake());
+                setPathState(PathState.MOVETOINTAKE);
+                break;
+            case MOVETOINTAKE:
+                if (!follower.isBusy()) {
+                    follower.follow(pathToShoot());
+                    setPathState(PathState.LAUNCH);
+                }
+                break;
+            case LAUNCH:
+                if (!follower.isBusy()) {
+                    // Shoot the collected pieces here.
+                    setPathState(PathState.DONE);
+                }
+                break;
+            case DONE:
+                break;
+        }
+
+        telemetry.addData("state", pathState);
+        telemetry.addData("pose", follower.pose());
+    }
+
+    @Override
+    public void stop() {
+        follower.stop();
     }
 
     private Path pathToIntake(){

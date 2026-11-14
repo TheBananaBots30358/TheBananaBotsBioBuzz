@@ -26,11 +26,11 @@ public class Robot {
         intake.init(hwMap);
 
         pollenLauncher.init(hwMap);
-        pollenLauncher.setFlywheelPID(100,0.1,0,12.15);
+        pollenLauncher.setFlywheelPID(100,0.05,0,12.15);
         pollenLauncher.setGatePositions(0.48,0.45);
 
         nectarLauncher.init(hwMap);
-        nectarLauncher.setFlywheelPID(100,0.1,0,12.15);
+        nectarLauncher.setFlywheelPID(100,0.05,0,12.15);
         nectarLauncher.setGatePositions(0, 0.5);
     }
 
