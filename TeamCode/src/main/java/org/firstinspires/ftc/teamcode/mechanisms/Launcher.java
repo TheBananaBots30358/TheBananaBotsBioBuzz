@@ -46,7 +46,6 @@ public class Launcher {
 
         flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        closeGate();
     }
 
     /** Start the flywheel spinning toward its target speed. */

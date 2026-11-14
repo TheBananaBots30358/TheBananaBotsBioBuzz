@@ -17,9 +17,9 @@ import org.firstinspires.ftc.teamcode.ConfigConstants;
  */
 public class Intake {
     // TODO: Tune these numbers on the real robot.
-    private static final double INTAKE_POWER = .6;
-    private static final double FLOWER_UP_POSITION = 0.5;
-    private static final double FLOWER_DOWN_POSITION = 0.0;
+    private static final double INTAKE_POWER = .725;
+    private static final double FLOWER_UP_POSITION = 0.27;
+    private static final double FLOWER_DOWN_POSITION = 0;
     ElapsedTime debounce = new ElapsedTime();
 
     private DcMotor intakeMotor;
