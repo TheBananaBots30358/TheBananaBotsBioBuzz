@@ -25,15 +25,13 @@ public class Robot {
         drivetrain.init(hwMap);
         intake.init(hwMap);
 
-        // Set gate positions before init(): init() closes the gate, so it needs
-        // the real closed position first. Otherwise the gate goes to 0.0.
-        pollenLauncher.setGatePositions(0.48,0.45);
         pollenLauncher.init(hwMap);
-        pollenLauncher.setFlywheelPID(80,0,0,12.1);
+        pollenLauncher.setFlywheelPID(100,0.05,0,12.15);
+        pollenLauncher.setGatePositions(0.48,0.45);
 
-        nectarLauncher.setGatePositions(0, 0.5);
         nectarLauncher.init(hwMap);
-        nectarLauncher.setFlywheelPID(80,0,0,12.1);
+        nectarLauncher.setFlywheelPID(100,0.05,0,12.15);
+        nectarLauncher.setGatePositions(0, 0.5);
     }
 
     public void stopAll() {
