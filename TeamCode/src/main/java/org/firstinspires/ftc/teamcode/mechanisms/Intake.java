@@ -19,7 +19,7 @@ public class Intake {
     // TODO: Tune these numbers on the real robot.
 
     ElapsedTime debounce = new ElapsedTime();
-    private static final double INTAKE_POWER = 0.8;
+    private static final double INTAKE_POWER = 0.725;
     private static final double FLOWER_UP_POSITION = 0.39;
     private static final double FLOWER_DOWN_POSITION = 0.13;
 
@@ -32,7 +32,7 @@ public class Intake {
         FloInt = hwMap.get(Servo.class, ConfigConstants.NAMES.FLOWER_INTAKE);
 
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        FloInt.setPosition(.42);
+        raiseFlower();
     }
 
     /** Spin the rollers to pull pieces in. */

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,28 +7,20 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-
 @TeleOp(name = "Flywheel PIDF Tuner")
-public class PIDFTuner extends OpMode {
-
+public class FlywheelPIDFTuner extends OpMode {
 
     private DcMotorEx launcher;
-
 
     double P = 40;
     double I = 0;
     double D = 0;
     double F = 12.5;
 
-
-    double targetVelocity = 1300;
-
+    double targetVelocity = -1860;
 
     int selectedPIDF = 0;
     double step = 0.1;
-
 
     boolean lastUp = false;
     boolean lastDown = false;
@@ -38,31 +29,31 @@ public class PIDFTuner extends OpMode {
     boolean lastA = false;
     boolean lastB = false;
 
-    String timeToSpeed = null;
+    ElapsedTime timer = new ElapsedTime();
 
-    ElapsedTime time = new ElapsedTime();
+    double time;
 
     @Override
     public void init() {
 
-        launcher = hardwareMap.get(DcMotorEx.class, ConfigConstants.NAMES.NECTAR_LAUNCHER);
+        launcher = hardwareMap.get(DcMotorEx.class, ConfigConstants.NAMES.POLLEN_LAUNCHER);
 
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         setPIDF();
-
-        time.reset();
     }
-
 
     @Override
     public void loop() {
+        if (launcher.getVelocity() <= 2140) {
+            timer.reset();
+            time = timer.milliseconds() / 1000.0;
+        }
 
         // Right bumper = flywheel ON
         // Left bumper = flywheel OFF
         if (gamepad1.right_bumper) {
             launcher.setVelocity(targetVelocity);
-            time.reset();
         }
 
         if (gamepad1.left_bumper) {
@@ -108,10 +99,6 @@ public class PIDFTuner extends OpMode {
             }
         }
 
-        if (launcher.getVelocity() >= targetVelocity) {
-            time.log(timeToSpeed);
-        }
-
         lastUp = gamepad1.dpad_up;
         lastDown = gamepad1.dpad_down;
         lastLeft = gamepad1.dpad_left;
@@ -119,55 +106,45 @@ public class PIDFTuner extends OpMode {
         lastA = gamepad1.a;
         lastB = gamepad1.b;
 
-
         telemetry.addData("Target Velocity", targetVelocity);
         telemetry.addData("Actual Velocity", launcher.getVelocity());
-
 
         telemetry.addData("P", P);
         telemetry.addData("I", I);
         telemetry.addData("D", D);
         telemetry.addData("F", F);
 
-
         telemetry.addData("Selected", getSelectedName());
         telemetry.addData("Step", step);
-
 
         telemetry.addData(
                 "Error",
                 targetVelocity - launcher.getVelocity()
         );
 
-        telemetry.addLine(timeToSpeed == null ? "0" : timeToSpeed);
+        telemetry.addData("Time", time);
 
         telemetry.update();
     }
 
-
     private void adjustPIDF(double amount) {
 
-
         switch (selectedPIDF) {
-
 
             case 0:
                 P += amount;
                 if (P < 0) P = 0;
                 break;
 
-
             case 1:
                 I += amount;
                 if (I < 0) I = 0;
                 break;
 
-
             case 2:
                 D += amount;
                 if (D < 0) D = 0;
                 break;
-
 
             case 3:
                 F += amount;
@@ -175,13 +152,10 @@ public class PIDFTuner extends OpMode {
                 break;
         }
 
-
         setPIDF();
     }
 
-
     private void setPIDF() {
-
 
         launcher.setPIDFCoefficients(
                 DcMotor.RunMode.RUN_USING_ENCODER,
@@ -189,34 +163,26 @@ public class PIDFTuner extends OpMode {
         );
     }
 
-
     private String getSelectedName() {
 
-
         switch (selectedPIDF) {
-
 
             case 0:
                 return "P";
 
-
             case 1:
                 return "I";
-
 
             case 2:
                 return "D";
 
-
             case 3:
                 return "F";
-
 
             default:
                 return "";
         }
     }
-
 
     @Override
     public void stop() {
