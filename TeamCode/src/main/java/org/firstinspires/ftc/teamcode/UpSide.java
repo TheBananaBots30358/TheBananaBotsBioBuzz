@@ -40,7 +40,7 @@ public class UpSide extends OpMode {
     private final Pose goalControl2 = poseFactory.of(56.4254, 118.7839, 0);
     private final Pose goalScorePose = poseFactory.of(64, 130, 90);
     private final Pose flowerIntakePose2 = poseFactory.of(48.0691, 118.3273, 90);
-    private final Pose flowerNudgePose2 = poseFactory.of(48.0691, 122, 90);
+    private final Pose flowerNudgePose2 = poseFactory.of(45.0691, 123, 90);
     private final Pose parkPose = poseFactory.of(8.1779, 116.872, 0);
     private final Pose parkControlPose = poseFactory.of(49.2363, 111.4036, 0);
 
@@ -56,8 +56,7 @@ public class UpSide extends OpMode {
     private final Robot robot = new Robot();
     private Follower follower;
     private final ElapsedTime stateTimer = new ElapsedTime();
-    private static final int POLLEN_TARGET_VELO = -1860;
-    private static final int NECTAR_TARGET_VELO = 2160;
+    private static final int POLLEN_TARGET_VELO = -1660;
     private static final double SHOOT_DURATION_SEC = 4.75;
     private static final double PATH_DONE_T = 0.96;
     private boolean actionTriggered = false;
@@ -97,6 +96,7 @@ public class UpSide extends OpMode {
         stateTimer.reset();
         actionTriggered = false;
         pathState = PathState.PRELOAD_SPIN_UP;
+        robot.intake.toggleFlower();
     }
     @Override
     public void loop() {
@@ -191,7 +191,7 @@ public class UpSide extends OpMode {
                 }
                 break;
             case FLOWER_NUDGE_FWD_2:
-                if ((!follower.following() || follower.completion() >= PATH_DONE_T) && stateTimer.milliseconds() <= 4000) {
+                if ((!follower.following() || follower.completion() >= PATH_DONE_T) && stateTimer.milliseconds() >= 3000) {
                     follower.follow(flowerBackPath2);
                     stateTimer.reset();
                     pathState = PathState.FLOWER_NUDGE_BACK_2;
@@ -208,6 +208,9 @@ public class UpSide extends OpMode {
                 }
                 break;
             case DRIVE_TO_GOAL_2:
+                if (follower.completion() >= 0.25){
+                    robot.intake.raiseFlower();
+                }
                 if (follower.completion() >= 0.40) {
                     spinUpLaunchers();
                 }

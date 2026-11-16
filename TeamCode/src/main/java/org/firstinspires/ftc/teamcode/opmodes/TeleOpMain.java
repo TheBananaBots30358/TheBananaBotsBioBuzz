@@ -41,7 +41,7 @@ public class TeleOpMain extends OpMode {
     @Override
     public void loop() {
         robot.nectarLauncher.setVelocity(2160);
-        robot.pollenLauncher.setVelocity(-1940);
+        robot.pollenLauncher.setVelocity(-1660);
         driveControls();
         intakeControls();
         launcherControls(robot.pollenLauncher, gamepad2.a);
