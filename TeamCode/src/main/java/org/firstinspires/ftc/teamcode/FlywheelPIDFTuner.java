@@ -17,7 +17,7 @@ public class FlywheelPIDFTuner extends OpMode {
     double D = 0;
     double F = 12.1;
 
-    double targetVelocity = ConfigConstants.VALUES.POLLEN_VELOCITY;
+    double targetVelocity = -1660;
 
     int selectedPIDF = 0;
     double step = 0.1;
@@ -45,13 +45,18 @@ public class FlywheelPIDFTuner extends OpMode {
 
     @Override
     public void loop() {
+        if (launcher.getVelocity() <= 2140) {
+            timer.reset();
+            time = timer.milliseconds() / 1000.0;
+        }
+
         // Right bumper = flywheel ON
         // Left bumper = flywheel OFF
-        if (gamepad1.right_trigger_pressed) {
+        if (gamepad1.right_bumper) {
             launcher.setVelocity(targetVelocity);
         }
 
-        if (gamepad1.left_trigger_pressed) {
+        if (gamepad1.left_bumper) {
             launcher.setVelocity(0);
         }
 
@@ -92,15 +97,6 @@ public class FlywheelPIDFTuner extends OpMode {
             if (step > 100) {
                 step = 100;
             }
-        }
-
-        if (gamepad1.right_bumper && timer.milliseconds() > 300){
-            targetVelocity += 20;
-            timer.reset();
-        }
-        if (gamepad2.left_bumper && timer.milliseconds() > 300) {
-            targetVelocity -= 20;
-            timer.reset();
         }
 
         lastUp = gamepad1.dpad_up;

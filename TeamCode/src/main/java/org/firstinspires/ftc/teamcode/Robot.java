@@ -29,11 +29,11 @@ public class Robot {
         // the real closed position first. Otherwise the gate goes to 0.0.
         pollenLauncher.setGatePositions(0.48,0.45);
         pollenLauncher.init(hwMap);
-        pollenLauncher.setFlywheelPID(100,0.05,0,12.15);
+        pollenLauncher.setFlywheelPID(80,0,0,12.1);
 
         nectarLauncher.setGatePositions(0, 0.5);
         nectarLauncher.init(hwMap);
-        nectarLauncher.setFlywheelPID(100,0.05,0,12.15);
+        nectarLauncher.setFlywheelPID(80,0,0,12.1);
     }
 
     public void stopAll() {
