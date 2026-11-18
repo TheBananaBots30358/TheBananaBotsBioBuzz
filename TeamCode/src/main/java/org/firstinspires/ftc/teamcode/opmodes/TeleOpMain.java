@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.ConfigConstants;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.mechanisms.Launcher;
 
@@ -40,8 +41,8 @@ public class TeleOpMain extends OpMode {
 
     @Override
     public void loop() {
-        robot.nectarLauncher.setVelocity(2160);
-        robot.pollenLauncher.setVelocity(-1660);
+        robot.nectarLauncher.setVelocity(ConfigConstants.VALUES.NECTAR_VELOCITY);
+        robot.pollenLauncher.setVelocity(ConfigConstants.VALUES.POLLEN_VELOCITY);
         driveControls();
         intakeControls();
         launcherControls(robot.pollenLauncher, gamepad2.a);

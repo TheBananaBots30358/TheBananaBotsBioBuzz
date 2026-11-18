@@ -38,10 +38,11 @@ public class UpSide extends OpMode {
     private final Pose flowerPushPose = poseFactory.of(12.5, 43.75, 180);
     private final Pose goalControl1 = poseFactory.of(19.9383, 90.0549, 0);
     private final Pose goalControl2 = poseFactory.of(56.4254, 118.7839, 0);
-    private final Pose goalScorePose = poseFactory.of(64, 130, 90);
+    private final Pose goalScorePose = poseFactory.of(61, 130, 90);
     private final Pose flowerIntakePose2 = poseFactory.of(48.0691, 118.3273, 90);
     private final Pose flowerNudgePose2 = poseFactory.of(45.0691, 123, 90);
-    private final Pose parkPose = poseFactory.of(8.1779, 116.872, 0);
+    private final Pose flowerControlPose2 = poseFactory.of(43.9561, 98.1724, 0);
+    private final Pose parkPose = poseFactory.of(12, 116.872, 0);
     private final Pose parkControlPose = poseFactory.of(49.2363, 111.4036, 0);
 
     private Path startToFlowerPath;
@@ -57,7 +58,7 @@ public class UpSide extends OpMode {
     private Follower follower;
     private final ElapsedTime stateTimer = new ElapsedTime();
     private static final int POLLEN_TARGET_VELO = -1660;
-    private static final double SHOOT_DURATION_SEC = 4.75;
+    private static final double SHOOT_DURATION_SEC = 3.5;
     private static final double PATH_DONE_T = 0.96;
     private boolean actionTriggered = false;
 
@@ -80,7 +81,7 @@ public class UpSide extends OpMode {
                 .linear(flowerIntakePose2, flowerNudgePose2);
         flowerBackPath2 = Paths.line(flowerNudgePose2, flowerIntakePose2)
                 .linear(goalScorePose, flowerIntakePose2);
-        flowerToGoalPath2 = Paths.line(flowerIntakePose2, goalScorePose)
+        flowerToGoalPath2 = Paths.curve(flowerIntakePose2, flowerControlPose2, goalScorePose)
                 .linear(flowerIntakePose2, goalScorePose);
         parkPath = Paths.curve(goalScorePose, parkControlPose, parkPose)
                 .linear(goalScorePose, parkPose);

@@ -37,12 +37,12 @@ public class Intake {
 
     /** Spin the rollers to pull pieces in. */
     public void start() {
-        intakeMotor.setPower(INTAKE_POWER);
+        intakeMotor.setPower(ConfigConstants.VALUES.INTAKE_POWER);
     }
 
     /** Spin the rollers backward to spit pieces out. */
     public void reverse() {
-        intakeMotor.setPower(-INTAKE_POWER);
+        intakeMotor.setPower(-ConfigConstants.VALUES.INTAKE_POWER);
     }
 
     public void stop() {
@@ -50,12 +50,12 @@ public class Intake {
     }
 
     public void raiseFlower() {
-        FloInt.setPosition(FLOWER_UP_POSITION);
+        FloInt.setPosition(ConfigConstants.VALUES.FLOWER_UP_POSITION);
         flowerIsUp = true;
     }
 
     public void lowerFlower() {
-        FloInt.setPosition(FLOWER_DOWN_POSITION);
+        FloInt.setPosition(ConfigConstants.VALUES.FLOWER_DOWN_POSITION);
         flowerIsUp = false;
     }
 

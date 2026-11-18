@@ -28,12 +28,12 @@ public class LauncherTest extends OpMode {
         pollen.setGatePositions(0.48,0.45);
         pollen.init(hardwareMap);
         pollen.setFlywheelPID(60,0.2,0,0);
-        pollen.setVelocity(-1920);
+        pollen.setVelocity(ConfigConstants.VALUES.POLLEN_VELOCITY);
 
         nectar.setGatePositions(0, 0.5);
         nectar.init(hardwareMap);
         nectar.setFlywheelPID(60,0.2,0,0);
-        nectar.setVelocity(2160);
+        nectar.setVelocity(ConfigConstants.VALUES.NECTAR_VELOCITY);
     }
 
     @Override
