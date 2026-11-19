@@ -27,6 +27,6 @@ public final class ConfigConstants {
         public static final double FLOWER_UP_POSITION = 0.39;
         public static final double FLOWER_DOWN_POSITION = 0.13;
         public static final double NECTAR_VELOCITY = 2160;
-        public static final double POLLEN_VELOCITY = -1640;
+        public static final double POLLEN_VELOCITY = -1660;
     }
 }
