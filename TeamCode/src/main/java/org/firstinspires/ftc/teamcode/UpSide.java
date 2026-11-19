@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode;
+import static java.lang.Thread.sleep;
+
 import com.pedropathing.api.Paths;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
@@ -36,10 +38,11 @@ public class UpSide extends OpMode {
     private final Pose flowerPushPose = poseFactory.of(12.5, 43.75, 180);
     private final Pose goalControl1 = poseFactory.of(19.9383, 90.0549, 0);
     private final Pose goalControl2 = poseFactory.of(56.4254, 118.7839, 0);
-    private final Pose goalScorePose = poseFactory.of(64, 130, 90);
+    private final Pose goalScorePose = poseFactory.of(61, 130, 90);
     private final Pose flowerIntakePose2 = poseFactory.of(48.0691, 118.3273, 90);
-    private final Pose flowerNudgePose2 = poseFactory.of(48.0691, 120.9554, 90);
-    private final Pose parkPose = poseFactory.of(8.1779, 116.872, 0);
+    private final Pose flowerNudgePose2 = poseFactory.of(45.0691, 123, 90);
+    private final Pose flowerControlPose2 = poseFactory.of(43.9561, 98.1724, 0);
+    private final Pose parkPose = poseFactory.of(12, 116.872, 0);
     private final Pose parkControlPose = poseFactory.of(49.2363, 111.4036, 0);
 
     private Path startToFlowerPath;
@@ -54,12 +57,10 @@ public class UpSide extends OpMode {
     private final Robot robot = new Robot();
     private Follower follower;
     private final ElapsedTime stateTimer = new ElapsedTime();
-    private static final int POLLEN_TARGET_VELO = -1860;
-    private static final int NECTAR_TARGET_VELO = 2160;
-    private static final double SHOOT_DURATION_SEC = 4.75;
+    private static final int POLLEN_TARGET_VELO = -1660;
+    private static final double SHOOT_DURATION_SEC = 3.5;
     private static final double PATH_DONE_T = 0.96;
     private boolean actionTriggered = false;
-
     @Override
     public void init() {
         robot.init(hardwareMap);
@@ -79,9 +80,9 @@ public class UpSide extends OpMode {
                 .linear(flowerIntakePose2, flowerNudgePose2);
         flowerBackPath2 = Paths.line(flowerNudgePose2, flowerIntakePose2)
                 .linear(goalScorePose, flowerIntakePose2);
-        flowerToGoalPath2 = Paths.line(flowerIntakePose2, goalScorePose)
+        flowerToGoalPath2 = Paths.curve(flowerIntakePose2, flowerControlPose2, goalScorePose)
                 .linear(flowerIntakePose2, goalScorePose);
-        parkPath = Paths.line(goalScorePose, parkPose)
+        parkPath = Paths.curve(goalScorePose, parkControlPose, parkPose)
                 .linear(goalScorePose, parkPose);
     }
 
@@ -95,6 +96,7 @@ public class UpSide extends OpMode {
         stateTimer.reset();
         actionTriggered = false;
         pathState = PathState.PRELOAD_SPIN_UP;
+        robot.intake.toggleFlower();
     }
     @Override
     public void loop() {
@@ -113,6 +115,9 @@ public class UpSide extends OpMode {
                 if (stateTimer.seconds() >= SHOOT_DURATION_SEC) {
                     closeGates();
                     stopLaunchers();
+                    if (!hiveTipped()) {
+                        flowerToGoalPath = Paths.curve(flowerPushPose, flowerControlPose, startPose);
+                    }
                     follower.follow(startToFlowerPath);
                     actionTriggered = false;
                     stateTimer.reset();
@@ -189,7 +194,7 @@ public class UpSide extends OpMode {
                 }
                 break;
             case FLOWER_NUDGE_FWD_2:
-                if (!follower.following() || follower.completion() >= PATH_DONE_T) {
+                if ((!follower.following() || follower.completion() >= PATH_DONE_T) && stateTimer.milliseconds() >= 3000) {
                     follower.follow(flowerBackPath2);
                     stateTimer.reset();
                     pathState = PathState.FLOWER_NUDGE_BACK_2;
@@ -206,6 +211,9 @@ public class UpSide extends OpMode {
                 }
                 break;
             case DRIVE_TO_GOAL_2:
+                if (follower.completion() >= 0.25){
+                    robot.intake.raiseFlower();
+                }
                 if (follower.completion() >= 0.40) {
                     spinUpLaunchers();
                 }
@@ -252,7 +260,8 @@ public class UpSide extends OpMode {
         robot.stopAll();
     }
     private boolean isAtShootingSpeed() {
-        return robot.pollenLauncher.isReady() && robot.nectarLauncher.isReady();
+        // Only pollen spins up for now. Add the nectar check back when spinUpLaunchers() spins nectar too.
+        return robot.pollenLauncher.isReady(); // && robot.nectarLauncher.isReady();
     }
     private void spinUpLaunchers() {
         robot.pollenLauncher.setVelocity(POLLEN_TARGET_VELO);
@@ -269,5 +278,9 @@ public class UpSide extends OpMode {
     private void stopLaunchers() {
         robot.pollenLauncher.stop();
         //robot.nectarLauncher.stop();
+    }
+    private boolean hiveTipped() {
+        return true;
+        // TODO add LL logic for hive here
     }
 }

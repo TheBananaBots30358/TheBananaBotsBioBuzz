@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
-@Autonomous(name = "AutoPath", group = "Autonomous")
+@Autonomous
 public class MovePark extends LinearOpMode {
 
     private Follower follower;
@@ -31,11 +31,11 @@ public class MovePark extends LinearOpMode {
 
         waitForStart();
 
+        // Start the path once. Calling follow() inside the loop restarts it every time.
+        follower.follow(path());
 
         while (opModeIsActive()) {
             follower.update();
-
-            follower.follow(path());
 
             telemetry.addData("x", follower.pose().x());
             telemetry.addData("y", follower.pose().y());

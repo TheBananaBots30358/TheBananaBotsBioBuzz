@@ -1,22 +1,27 @@
+
 buildscript {
     repositories {
         mavenCentral()
         google()
+
         maven {
             url "https://repo.dairy.foundation/releases"
         }
     }
+
     dependencies {
         classpath "dev.frozenmilk:Load:0.3.2"
     }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'dev.frozenmilk.sinister.sloth.load'
 
-// Include common definitions from above.
+// FTC standard configuration
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
+
+// Sloth Load plugin
+apply plugin: 'dev.frozenmilk.sinister.sloth.load'
 
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
@@ -26,37 +31,24 @@ android {
     }
 }
 
+// Additional repositories
 repositories {
+    mavenCentral()
+    google()
+
     maven {
-        url "https://repo.dairy.foundation/releases"
+        url = "https://repo.dairy.foundation/releases"
     }
 }
 
 dependencies {
+    // FTC Robot Controller
     implementation project(':FtcRobotController')
-    implementation("dev.frozenmilk.sinister:Sloth:0.3.2")
-    annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
-}
-buildscript {
-    repositories {
-        mavenCentral()
-        google()
-        maven { url = "https://repo.dairy.foundation/releases" }
-    }
-    dependencies {
-        // Match the version number with the Sloth dependency below
-        classpath "dev.frozenmilk:Load:0.3.2"
-    }
-}
 
-// Add this directly below your existing 'apply plugin:' lines
-apply plugin: 'dev.frozenmilk.sinister.sloth.load'
+    // PedroPathing
+    implementation 'com.pedropathing:revhub:3.0.1'
+    implementation 'com.pedropathing:tuning:1.0.1'
 
-repositories {
-    maven { url = "https://repo.dairy.foundation/releases" }
+    // Sloth
+    implementation 'dev.frozenmilk.sinister:Sloth:0.3.2'
 }
-
-dependencies {
-    implementation("dev.frozenmilk.sinister:Sloth:0.3.2")
-}
-
