@@ -61,7 +61,6 @@ public class UpSide extends OpMode {
     private static final double SHOOT_DURATION_SEC = 3.5;
     private static final double PATH_DONE_T = 0.96;
     private boolean actionTriggered = false;
-
     @Override
     public void init() {
         robot.init(hardwareMap);
@@ -116,6 +115,9 @@ public class UpSide extends OpMode {
                 if (stateTimer.seconds() >= SHOOT_DURATION_SEC) {
                     closeGates();
                     stopLaunchers();
+                    if (!hiveTipped()) {
+                        flowerToGoalPath = Paths.curve(flowerPushPose, flowerControlPose, startPose);
+                    }
                     follower.follow(startToFlowerPath);
                     actionTriggered = false;
                     stateTimer.reset();
@@ -276,5 +278,9 @@ public class UpSide extends OpMode {
     private void stopLaunchers() {
         robot.pollenLauncher.stop();
         //robot.nectarLauncher.stop();
+    }
+    private boolean hiveTipped() {
+        return true;
+        // TODO add LL logic for hive here
     }
 }
