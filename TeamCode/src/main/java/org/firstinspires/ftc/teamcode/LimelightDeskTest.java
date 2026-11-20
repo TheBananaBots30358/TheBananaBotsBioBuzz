@@ -17,12 +17,16 @@ public class LimelightDeskTest extends LinearOpMode {
     private static final double METERS_TO_INCHES = 39.3701;
 
     // Your configured Limelight pipelines
+    private static final int PIPELINE_FINAL  = 0; // IDs: ALL ID
+
     private static final int PIPELINE_RED_0  = 1; // IDs: 33, 32, 31, 30
     private static final int PIPELINE_RED_1  = 2; // IDs: 34, 35, 36, 37
     private static final int PIPELINE_BLUE_2 = 3; // IDs: 45, 44, 43, 42
     private static final int PIPELINE_BLUE_3 = 4; // IDs: 38, 39, 40, 41
 
-    private int activePipeline = PIPELINE_RED_0;
+    //private int activePipeline = PIPELINE_RED_0;
+    private int activePipeline = PIPELINE_FINAL;
+
 
     private static class HiveVisionData {
         boolean detected = false;
@@ -74,7 +78,7 @@ public class LimelightDeskTest extends LinearOpMode {
         HiveVisionData hive = getHiveData();
 
         telemetry.addData("Mode", mode);
-        telemetry.addLine("B=Red0 | A=Red1 | X=Blue2 | Y=Blue3");
+        //telemetry.addLine("B=Red0 | A=Red1 | X=Blue2 | Y=Blue3");
         telemetry.addData("Active Pipeline", getPipelineName(activePipeline));
         telemetry.addLine("--------------------------------");
 
@@ -93,10 +97,12 @@ public class LimelightDeskTest extends LinearOpMode {
 
     private String getPipelineName(int index) {
         switch (index) {
-            case 0: return "0: Red0 (IDs 30-33)";
-            case 1: return "1: Red1 (IDs 34-37)";
-            case 2: return "2: Blue2 (IDs 42-45)";
-            case 3: return "3: Blue3 (IDs 38-41)";
+            case 0: return "0: ALL (IDs 30-45)";
+
+            case 1: return "1: Red0 (IDs 30-33)";
+            case 2: return "2: Red1 (IDs 34-37)";
+            case 3: return "3: Blue2 (IDs 42-45)";
+            case 4: return "4: Blue3 (IDs 38-41)";
             default: return "Unknown";
         }
     }

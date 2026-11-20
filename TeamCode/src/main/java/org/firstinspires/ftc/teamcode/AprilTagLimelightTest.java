@@ -19,6 +19,7 @@ public class AprilTagLimelightTest extends OpMode {
         limelight3A = hardwareMap.get(Limelight3A.class, "limelight");
         limelight3A.pipelineSwitch(0); //0 for All AprilTag ID
         limelight3A.start();
+        telemetry.addData("Status", "Initialized. Waiting for start...");
 
     }
 
@@ -26,7 +27,7 @@ public class AprilTagLimelightTest extends OpMode {
     public void start() {
         limelight3A.start();
 
-        telemetry.addData("Status", "Initialized. Waiting for start...");
+
         telemetry.update();
     }
 
