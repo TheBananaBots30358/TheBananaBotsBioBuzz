@@ -35,6 +35,7 @@ public class LimelightSystem {
         public double yInches = 0.0;    // Vertical (Up/Down)
         public double zInches = 0.0;    // Distance (Forward/Back)
         public double yawDegrees = 0.0; // Heading angle relative to the tag
+
     }
 
     // Constructor requiring an Alliance (RED, BLUE, or ALL)
