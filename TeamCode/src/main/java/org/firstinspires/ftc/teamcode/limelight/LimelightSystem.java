@@ -41,6 +41,8 @@ public class LimelightSystem {
         public double yInches = 0.0;    // Vertical (Up/Down)
         public double zInches = 0.0;    // Distance (Forward/Back)
         public double yawDegrees = 0.0; // Heading angle relative to the tag
+
+        public double rollDegrees = 0.0;
     }
 
     // Constructor requiring an Alliance (RED, BLUE, or ALL)
@@ -48,7 +50,7 @@ public class LimelightSystem {
         this.targetAlliance = alliance;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(PIPELINE_ALL_TAGS);
-        limelight.setPollRateHz(100);
+        limelight.setPollRateHz(200);
     }
 
     // Optional setter if your Auto team lets drivers toggle alliance on a gamepad during Init
@@ -93,6 +95,7 @@ public class LimelightSystem {
                 double rollDeg = tag.getTargetPoseCameraSpace().getOrientation().getRoll();
                 data.isTipped = Math.abs(rollDeg) >= 90.0;
                 data.isUpright = !data.isTipped;
+                data.rollDegrees = rollDeg;
 
                 // Grab X, Y, Z, and Yaw relative to the tag
                 Pose3D robotPose = tag.getRobotPoseTargetSpace();
@@ -141,6 +144,7 @@ public class LimelightSystem {
             telemetry.addData("Vertical (Up/Down) Y (in)", String.format("%.1f", hive.yInches));
             telemetry.addData("Distance Z (in)", String.format("%.1f", hive.zInches));
             telemetry.addData("Yaw Angle (deg)", String.format("%.1f", hive.yawDegrees));
+            telemetry.addData("Roll Angle (deg)", String.format("%.1f", hive.rollDegrees));
         } else {
             telemetry.addLine("No matching AprilTag detected");
         }

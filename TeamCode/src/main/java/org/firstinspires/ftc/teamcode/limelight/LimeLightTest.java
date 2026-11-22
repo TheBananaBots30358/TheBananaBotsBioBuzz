@@ -42,6 +42,8 @@ public class LimeLightTest extends LinearOpMode {
         public double yInches = 0.0;    // Vertical (Up/Down)
         public double zInches = 0.0;    // Distance (Forward/Back)
         public double yawDegrees = 0.0; // Heading angle relative to the tag
+        public double rollDegrees = 0.0;
+
     }
 
     @Override
@@ -99,6 +101,8 @@ public class LimeLightTest extends LinearOpMode {
                 double rollDeg = tag.getTargetPoseCameraSpace().getOrientation().getRoll();
                 data.isTipped = Math.abs(rollDeg) >= TIPPED_ROLL_THRESHOLD_DEG;
                 data.isUpright = !data.isTipped;
+                data.rollDegrees = rollDeg;
+
 
                 // Grab X, Y, Z, and Yaw relative to the tag
                 Pose3D robotPose = tag.getRobotPoseTargetSpace();
@@ -151,6 +155,8 @@ public class LimeLightTest extends LinearOpMode {
             telemetry.addData("Vertical (Up/Down) Y (in)", String.format("%.1f", hive.yInches));
             telemetry.addData("Distance Z (in)", String.format("%.1f", hive.zInches));
             telemetry.addData("Yaw Angle (deg)", String.format("%.1f", hive.yawDegrees));
+            telemetry.addData("Roll Angle (deg)", String.format("%.1f", hive.rollDegrees));
+
         } else {
             telemetry.addLine("No matching AprilTag detected");
         }
