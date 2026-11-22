@@ -24,18 +24,23 @@ public class LimelightSystem {
     private static final double METERS_TO_INCHES = 39.3701;
     private static final int PIPELINE_ALL_TAGS = 0;
 
+    // AprilTag ID ranges
+    private static final int RED_TAG_MIN = 30;
+    private static final int RED_TAG_MAX = 37;
+    private static final int BLUE_TAG_MIN = 38;
+    private static final int BLUE_TAG_MAX = 45;
+
     // Public data container returned to Autonomous OpModes
     public static class HiveVisionData {
         public boolean detected = false;
         public int tagId = -1;
         public String hiveColor = "NONE";
         public boolean isTipped = false;
-        boolean isUpright = false;
+        public boolean isUpright = false;
         public double xInches = 0.0;    // Strafe (Left/Right)
         public double yInches = 0.0;    // Vertical (Up/Down)
         public double zInches = 0.0;    // Distance (Forward/Back)
         public double yawDegrees = 0.0; // Heading angle relative to the tag
-
     }
 
     // Constructor requiring an Alliance (RED, BLUE, or ALL)
@@ -60,14 +65,10 @@ public class LimelightSystem {
     }
 
     private String getPipelineName(int index) {
-        switch (index) {
-            case 0: return "0: ALL (IDs 30-45)";
-            case 1: return "1: Red0 (IDs 30-33)";
-            case 2: return "2: Red1 (IDs 34-37)";
-            case 3: return "3: Blue2 (IDs 42-45)";
-            case 4: return "4: Blue3 (IDs 38-41)";
-            default: return "Unknown";
+        if (index == PIPELINE_ALL_TAGS) {
+            return "0: ALL (IDs " + RED_TAG_MIN + "-" + BLUE_TAG_MAX + ")";
         }
+        return "Unknown";
     }
 
     public HiveVisionData getHiveData() {
@@ -91,8 +92,7 @@ public class LimelightSystem {
                 // Check roll to see if the tag is upside-down/tipped (>= 90 degrees)
                 double rollDeg = tag.getTargetPoseCameraSpace().getOrientation().getRoll();
                 data.isTipped = Math.abs(rollDeg) >= 90.0;
-                data.isUpright = Math.abs(rollDeg) < 90.0;
-
+                data.isUpright = !data.isTipped;
 
                 // Grab X, Y, Z, and Yaw relative to the tag
                 Pose3D robotPose = tag.getRobotPoseTargetSpace();
@@ -109,19 +109,19 @@ public class LimelightSystem {
     private boolean matchesAlliance(int id) {
         switch (targetAlliance) {
             case RED:
-                return id >= 30 && id <= 37;
+                return id >= RED_TAG_MIN && id <= RED_TAG_MAX;
             case BLUE:
-                return id >= 38 && id <= 45;
+                return id >= BLUE_TAG_MIN && id <= BLUE_TAG_MAX;
             case ALL:
             default:
-                return (id >= 30 && id <= 45);
+                return (id >= RED_TAG_MIN && id <= BLUE_TAG_MAX);
         }
     }
 
     private String getHiveColor(int id) {
-        if (id >= 30 && id <= 37) {
+        if (id >= RED_TAG_MIN && id <= RED_TAG_MAX) {
             return "RED";
-        } else if (id >= 38 && id <= 45) {
+        } else if (id >= BLUE_TAG_MIN && id <= BLUE_TAG_MAX) {
             return "BLUE";
         }
         return "UNKNOWN";
@@ -141,9 +141,6 @@ public class LimelightSystem {
             telemetry.addData("Vertical (Up/Down) Y (in)", String.format("%.1f", hive.yInches));
             telemetry.addData("Distance Z (in)", String.format("%.1f", hive.zInches));
             telemetry.addData("Yaw Angle (deg)", String.format("%.1f", hive.yawDegrees));
-
-            /*telemetry.addData("Pos (X, Y, Z) in", String.format("%.1f, %.1f, %.1f",
-                    hive.xInches, hive.yInches, hive.zInches));*/
         } else {
             telemetry.addLine("No matching AprilTag detected");
         }
