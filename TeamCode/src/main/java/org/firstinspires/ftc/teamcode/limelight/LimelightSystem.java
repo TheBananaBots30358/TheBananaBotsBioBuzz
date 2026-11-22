@@ -1,37 +1,36 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.limelight;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import java.util.List;
 
-@Autonomous(name = "LimeLight Test", group = "Test")
-public class LimeLightTest extends LinearOpMode {
+public class LimelightSystem {
 
     public enum Alliance {
-        RED, BLUE, ALL
+        RED,
+        BLUE,
+        ALL // Useful for desk testing when you want to see every tag
     }
 
-    private Limelight3A limelight;
-    private Alliance targetAlliance = Alliance.ALL;
+    private final Limelight3A limelight;
+    private Alliance targetAlliance;
 
-    // Constants matching LimelightSystem
     private static final double METERS_TO_INCHES = 39.3701;
     private static final int PIPELINE_ALL_TAGS = 0;
 
+    // AprilTag ID ranges
     private static final int RED_TAG_MIN = 30;
     private static final int RED_TAG_MAX = 37;
     private static final int BLUE_TAG_MIN = 38;
     private static final int BLUE_TAG_MAX = 45;
 
-    private static final double TIPPED_ROLL_THRESHOLD_DEG = 90.0;
-
-    // Standalone test data container matching LimelightSystem.HiveVisionData
+    // Public data container returned to Autonomous OpModes
     public static class HiveVisionData {
         public boolean detected = false;
         public int tagId = -1;
@@ -44,41 +43,32 @@ public class LimeLightTest extends LinearOpMode {
         public double yawDegrees = 0.0; // Heading angle relative to the tag
     }
 
-    @Override
-    public void runOpMode() {
+    // Constructor requiring an Alliance (RED, BLUE, or ALL)
+    public LimelightSystem(HardwareMap hardwareMap, Alliance alliance) {
+        this.targetAlliance = alliance;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(PIPELINE_ALL_TAGS);
         limelight.setPollRateHz(100);
+    }
+
+    // Optional setter if your Auto team lets drivers toggle alliance on a gamepad during Init
+    public void setAlliance(Alliance alliance) {
+        this.targetAlliance = alliance;
+    }
+
+    public void start() {
         limelight.start();
+    }
 
-        // Live preview during Init (use gamepad1 buttons to test alliance filtering)
-        //This is for testing
-        while (!isStarted() && !isStopRequested()) {
-            if (gamepad1.b) targetAlliance = Alliance.RED;
-            if (gamepad1.x) targetAlliance = Alliance.BLUE;
-            if (gamepad1.a) targetAlliance = Alliance.ALL;
-
-            updateVisionTelemetry("INIT");
-        }
-
-        // Live updates during Auto
-        while (opModeIsActive()) {
-            updateVisionTelemetry("RUNNING");
-        }
-
+    public void stop() {
         limelight.stop();
     }
 
-    //Pipeline name also for telementry and to make sure we are targeting correct Pipeline
     private String getPipelineName(int index) {
-        switch (index) {
-            case 0: return "0: ALL (IDs 30-45)";
-            case 1: return "1: Red0 (IDs 30-33)";
-            case 2: return "2: Red1 (IDs 34-37)";
-            case 3: return "3: Blue2 (IDs 42-45)";
-            case 4: return "4: Blue3 (IDs 38-41)";
-            default: return "Unknown";
+        if (index == PIPELINE_ALL_TAGS) {
+            return "0: ALL (IDs " + RED_TAG_MIN + "-" + BLUE_TAG_MAX + ")";
         }
+        return "Unknown";
     }
 
     public HiveVisionData getHiveData() {
@@ -87,9 +77,13 @@ public class LimeLightTest extends LinearOpMode {
 
         if (result != null && result.isValid()) {
             List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+
+            // Loop through all detected tags and grab the first one matching our alliance
             for (LLResultTypes.FiducialResult tag : fiducials) {
                 int id = tag.getFiducialId();
-                if (!matchesAlliance(id)) continue;
+                if (!matchesAlliance(id)) {
+                    continue; // Ignore opponent or unknown tags
+                }
 
                 data.detected = true;
                 data.tagId = id;
@@ -97,7 +91,7 @@ public class LimeLightTest extends LinearOpMode {
 
                 // Check roll to see if the tag is upside-down/tipped (>= 90 degrees)
                 double rollDeg = tag.getTargetPoseCameraSpace().getOrientation().getRoll();
-                data.isTipped = Math.abs(rollDeg) >= TIPPED_ROLL_THRESHOLD_DEG;
+                data.isTipped = Math.abs(rollDeg) >= 90.0;
                 data.isUpright = !data.isTipped;
 
                 // Grab X, Y, Z, and Yaw relative to the tag
@@ -120,8 +114,7 @@ public class LimeLightTest extends LinearOpMode {
                 return id >= BLUE_TAG_MIN && id <= BLUE_TAG_MAX;
             case ALL:
             default:
-                return (id >= RED_TAG_MIN && id <= RED_TAG_MAX)
-                        || (id >= BLUE_TAG_MIN && id <= BLUE_TAG_MAX);
+                return (id >= RED_TAG_MIN && id <= BLUE_TAG_MAX);
         }
     }
 
@@ -134,19 +127,16 @@ public class LimeLightTest extends LinearOpMode {
         return "UNKNOWN";
     }
 
-    private void updateVisionTelemetry(String status) {
-        HiveVisionData hive = getHiveData();
-        telemetry.addData("Mode Status", status);
+    public void addTelemetry(Telemetry telemetry, HiveVisionData hive) {
+        telemetry.addData("Target Alliance", targetAlliance);
         telemetry.addData("Active Pipeline", getPipelineName(PIPELINE_ALL_TAGS));
-        telemetry.addData("Target Alliance", targetAlliance + " (B=Red | X=Blue | A=All)");
         telemetry.addLine("--------------------------------");
 
         if (hive.detected) {
             telemetry.addData("Tag Detected ID", hive.tagId);
             telemetry.addData("Hive Color", hive.hiveColor);
             telemetry.addData("Hive Tipped", hive.isTipped);
-            telemetry.addData("Hive Upright", hive.isUpright);
-            telemetry.addData("Hive Status", hive.isTipped ? "TIPPED (Upside-Down)" : "UPRIGHT");
+            telemetry.addData("Hive Status", hive.isUpright ? "UPRIGHT" : "TIPPED (Upside-Down)");
             telemetry.addData("Strafe (Left/Right) X (in)", String.format("%.1f", hive.xInches));
             telemetry.addData("Vertical (Up/Down) Y (in)", String.format("%.1f", hive.yInches));
             telemetry.addData("Distance Z (in)", String.format("%.1f", hive.zInches));
@@ -154,6 +144,5 @@ public class LimeLightTest extends LinearOpMode {
         } else {
             telemetry.addLine("No matching AprilTag detected");
         }
-        telemetry.update();
     }
 }
