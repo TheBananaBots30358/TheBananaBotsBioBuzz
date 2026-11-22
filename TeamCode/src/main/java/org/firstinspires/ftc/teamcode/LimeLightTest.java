@@ -13,7 +13,12 @@ import java.util.List;
 @Autonomous(name = "LimeLight Test", group = "Test")
 public class LimeLightTest extends LinearOpMode {
 
+    public enum Alliance {
+        RED, BLUE, ALL
+    }
+
     private Limelight3A limelight;
+    private Alliance targetAlliance = Alliance.ALL;
 
     // Constants matching LimelightSystem
     private static final double METERS_TO_INCHES = 39.3701;
@@ -46,8 +51,13 @@ public class LimeLightTest extends LinearOpMode {
         limelight.setPollRateHz(100);
         limelight.start();
 
-        // Live preview during Init
+        // Live preview during Init (use gamepad1 buttons to test alliance filtering)
+        //This is for testing
         while (!isStarted() && !isStopRequested()) {
+            if (gamepad1.b) targetAlliance = Alliance.RED;
+            if (gamepad1.x) targetAlliance = Alliance.BLUE;
+            if (gamepad1.a) targetAlliance = Alliance.ALL;
+
             updateVisionTelemetry("INIT");
         }
 
@@ -59,6 +69,7 @@ public class LimeLightTest extends LinearOpMode {
         limelight.stop();
     }
 
+    //Pipeline name also for telementry and to make sure we are targeting correct Pipeline
     private String getPipelineName(int index) {
         switch (index) {
             case 0: return "0: ALL (IDs 30-45)";
@@ -76,11 +87,13 @@ public class LimeLightTest extends LinearOpMode {
 
         if (result != null && result.isValid()) {
             List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
-            if (!fiducials.isEmpty()) {
-                LLResultTypes.FiducialResult tag = fiducials.get(0);
+            for (LLResultTypes.FiducialResult tag : fiducials) {
+                int id = tag.getFiducialId();
+                if (!matchesAlliance(id)) continue;
+
                 data.detected = true;
-                data.tagId = tag.getFiducialId();
-                data.hiveColor = getHiveColor(data.tagId);
+                data.tagId = id;
+                data.hiveColor = getHiveColor(id);
 
                 // Check roll to see if the tag is upside-down/tipped (>= 90 degrees)
                 double rollDeg = tag.getTargetPoseCameraSpace().getOrientation().getRoll();
@@ -93,9 +106,23 @@ public class LimeLightTest extends LinearOpMode {
                 data.yInches    = robotPose.getPosition().y * METERS_TO_INCHES;
                 data.zInches    = robotPose.getPosition().z * METERS_TO_INCHES;
                 data.yawDegrees = robotPose.getOrientation().getYaw();
+                break;
             }
         }
         return data;
+    }
+
+    private boolean matchesAlliance(int id) {
+        switch (targetAlliance) {
+            case RED:
+                return id >= RED_TAG_MIN && id <= RED_TAG_MAX;
+            case BLUE:
+                return id >= BLUE_TAG_MIN && id <= BLUE_TAG_MAX;
+            case ALL:
+            default:
+                return (id >= RED_TAG_MIN && id <= RED_TAG_MAX)
+                        || (id >= BLUE_TAG_MIN && id <= BLUE_TAG_MAX);
+        }
     }
 
     private String getHiveColor(int id) {
@@ -111,6 +138,7 @@ public class LimeLightTest extends LinearOpMode {
         HiveVisionData hive = getHiveData();
         telemetry.addData("Mode Status", status);
         telemetry.addData("Active Pipeline", getPipelineName(PIPELINE_ALL_TAGS));
+        telemetry.addData("Target Alliance", targetAlliance + " (B=Red | X=Blue | A=All)");
         telemetry.addLine("--------------------------------");
 
         if (hive.detected) {
@@ -124,7 +152,7 @@ public class LimeLightTest extends LinearOpMode {
             telemetry.addData("Distance Z (in)", String.format("%.1f", hive.zInches));
             telemetry.addData("Yaw Angle (deg)", String.format("%.1f", hive.yawDegrees));
         } else {
-            telemetry.addLine("No AprilTag detected");
+            telemetry.addLine("No matching AprilTag detected");
         }
         telemetry.update();
     }
