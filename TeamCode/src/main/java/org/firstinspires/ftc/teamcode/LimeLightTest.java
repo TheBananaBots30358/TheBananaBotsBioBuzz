@@ -14,20 +14,29 @@ import java.util.List;
 public class LimeLightTest extends LinearOpMode {
 
     private Limelight3A limelight;
+
+    // Constants matching LimelightSystem
     private static final double METERS_TO_INCHES = 39.3701;
     private static final int PIPELINE_ALL_TAGS = 0;
 
-    // Public data container so your Auto team can easily reuse this structure
+    private static final int RED_TAG_MIN = 30;
+    private static final int RED_TAG_MAX = 37;
+    private static final int BLUE_TAG_MIN = 38;
+    private static final int BLUE_TAG_MAX = 45;
+
+    private static final double TIPPED_ROLL_THRESHOLD_DEG = 90.0;
+
+    // Standalone test data container matching LimelightSystem.HiveVisionData
     public static class HiveVisionData {
         public boolean detected = false;
         public int tagId = -1;
         public String hiveColor = "NONE";
         public boolean isTipped = false;
+        public boolean isUpright = false;
         public double xInches = 0.0;    // Strafe (Left/Right)
         public double yInches = 0.0;    // Vertical (Up/Down)
         public double zInches = 0.0;    // Distance (Forward/Back)
         public double yawDegrees = 0.0; // Heading angle relative to the tag
-
     }
 
     @Override
@@ -75,7 +84,8 @@ public class LimeLightTest extends LinearOpMode {
 
                 // Check roll to see if the tag is upside-down/tipped (>= 90 degrees)
                 double rollDeg = tag.getTargetPoseCameraSpace().getOrientation().getRoll();
-                data.isTipped = Math.abs(rollDeg) >= 90.0;
+                data.isTipped = Math.abs(rollDeg) >= TIPPED_ROLL_THRESHOLD_DEG;
+                data.isUpright = !data.isTipped;
 
                 // Grab X, Y, Z, and Yaw relative to the tag
                 Pose3D robotPose = tag.getRobotPoseTargetSpace();
@@ -89,9 +99,9 @@ public class LimeLightTest extends LinearOpMode {
     }
 
     private String getHiveColor(int id) {
-        if (id >= 30 && id <= 37) {
+        if (id >= RED_TAG_MIN && id <= RED_TAG_MAX) {
             return "RED";
-        } else if (id >= 38 && id <= 45) {
+        } else if (id >= BLUE_TAG_MIN && id <= BLUE_TAG_MAX) {
             return "BLUE";
         }
         return "UNKNOWN";
@@ -100,23 +110,19 @@ public class LimeLightTest extends LinearOpMode {
     private void updateVisionTelemetry(String status) {
         HiveVisionData hive = getHiveData();
         telemetry.addData("Mode Status", status);
-        //telemetry.addLine("B=Red0 | A=Red1 | X=Blue2 | Y=Blue3");
         telemetry.addData("Active Pipeline", getPipelineName(PIPELINE_ALL_TAGS));
         telemetry.addLine("--------------------------------");
-
 
         if (hive.detected) {
             telemetry.addData("Tag Detected ID", hive.tagId);
             telemetry.addData("Hive Color", hive.hiveColor);
             telemetry.addData("Hive Tipped", hive.isTipped);
-            telemetry.addData("Hive Status", hive.isTipped ? "UPRIGHT" : "TIPPED (Upside-Down)");
+            telemetry.addData("Hive Upright", hive.isUpright);
+            telemetry.addData("Hive Status", hive.isTipped ? "TIPPED (Upside-Down)" : "UPRIGHT");
             telemetry.addData("Strafe (Left/Right) X (in)", String.format("%.1f", hive.xInches));
             telemetry.addData("Vertical (Up/Down) Y (in)", String.format("%.1f", hive.yInches));
             telemetry.addData("Distance Z (in)", String.format("%.1f", hive.zInches));
             telemetry.addData("Yaw Angle (deg)", String.format("%.1f", hive.yawDegrees));
-
-            /*telemetry.addData("Pos (X, Y, Z) in", String.format("%.1f, %.1f, %.1f",
-                    hive.xInches, hive.yInches, hive.zInches));*/
         } else {
             telemetry.addLine("No AprilTag detected");
         }
