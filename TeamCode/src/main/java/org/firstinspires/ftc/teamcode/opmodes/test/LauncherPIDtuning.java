@@ -32,7 +32,7 @@ public class LauncherPIDtuning extends LinearOpMode {
         waitForStart();
         double NectarVelocity = 1760;
         double velocity_stepNectar = 20;
-        double PollenVelocity = -1860;
+        double PollenVelocity = -1660;
         double velocity_stepPollen = -1;
 
 
