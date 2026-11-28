@@ -32,7 +32,6 @@ public class Intake {
         FloInt = hwMap.get(Servo.class, ConfigConstants.NAMES.FLOWER_INTAKE);
 
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        raiseFlower();
     }
 
     /** Spin the rollers to pull pieces in. */

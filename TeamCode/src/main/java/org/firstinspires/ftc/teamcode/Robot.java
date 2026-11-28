@@ -27,7 +27,7 @@ public class Robot {
 
         // Set gate positions before init(): init() closes the gate, so it needs
         // the real closed position first. Otherwise the gate goes to 0.0.
-        pollenLauncher.setGatePositions(0.48,0.45);
+        pollenLauncher.setGatePositions(0.42,0.34);
         pollenLauncher.init(hwMap);
         pollenLauncher.setFlywheelPID(80,0,0,12.1);
 
