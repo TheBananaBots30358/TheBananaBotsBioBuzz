@@ -26,14 +26,14 @@ public class Robot {
         intake.init(hwMap);
 
         // Set gate positions before init(): init() closes the gate, so it needs
-        // the real closed position first. Otherwise the gate goes to 0.0.
-        pollenLauncher.setGatePositions(0.48,0.45);
+        // the real closed position first. Otherwise, the gate goes to 0.0.
+        pollenLauncher.setGatePositions(0.42,0.34);
         pollenLauncher.init(hwMap);
-        pollenLauncher.setFlywheelPID(80,0,0,12.1);
+        pollenLauncher.setFlywheelPID(100,0,0,12.1);
 
-        nectarLauncher.setGatePositions(0, 0.5);
+        nectarLauncher.setGatePositions(0, 0.2);
         nectarLauncher.init(hwMap);
-        nectarLauncher.setFlywheelPID(80,0,0,12.1);
+        nectarLauncher.setFlywheelPID(90,0,0,12.1);
     }
 
     public void stopAll() {
