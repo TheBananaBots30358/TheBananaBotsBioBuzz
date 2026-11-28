@@ -17,7 +17,7 @@ public class FlywheelPIDFTuner extends OpMode {
     double D = 0;
     double F = 12.1;
 
-    double targetVelocity = -1660;
+    double targetVelocity = ConfigConstants.VALUES.POLLEN_VELOCITY;
 
     int selectedPIDF = 0;
     double step = 0.1;
@@ -28,6 +28,7 @@ public class FlywheelPIDFTuner extends OpMode {
     boolean lastRight = false;
     boolean lastA = false;
     boolean lastB = false;
+
 
     double time;
 
@@ -94,7 +95,8 @@ public class FlywheelPIDFTuner extends OpMode {
 
         if (gamepad1.right_bumper && timer.milliseconds() > 300){
             targetVelocity += 20;
-        } else if (gamepad1.left_bumper && timer.milliseconds() > 300) {
+        }
+        if (gamepad2.left_bumper && timer.milliseconds() > 300) {
             targetVelocity -= 20;
         }
 
