@@ -17,7 +17,7 @@ public class FlywheelPIDFTuner extends OpMode {
     double D = 0;
     double F = 12.1;
 
-    double targetVelocity = ConfigConstants.VALUES.POLLEN_VELOCITY;
+    double targetVelocity = ConfigConstants.VALUES.NECTAR_VELOCITY;
 
     int selectedPIDF = 0;
     double step = 0.1;
@@ -31,10 +31,12 @@ public class FlywheelPIDFTuner extends OpMode {
 
     ElapsedTime timer = new ElapsedTime();
 
+    double time;
+
     @Override
     public void init() {
 
-        launcher = hardwareMap.get(DcMotorEx.class, ConfigConstants.NAMES.POLLEN_LAUNCHER);
+        launcher = hardwareMap.get(DcMotorEx.class, ConfigConstants.NAMES.NECTAR_LAUNCHER);
 
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -96,7 +98,7 @@ public class FlywheelPIDFTuner extends OpMode {
             targetVelocity += 20;
             timer.reset();
         }
-        if (gamepad2.left_bumper && timer.milliseconds() > 300) {
+        if (gamepad1.left_bumper && timer.milliseconds() > 300) {
             targetVelocity -= 20;
             timer.reset();
         }
