@@ -29,8 +29,7 @@ public class FlywheelPIDFTuner extends OpMode {
     boolean lastA = false;
     boolean lastB = false;
 
-
-    double time;
+    ElapsedTime timer = new ElapsedTime();
 
     @Override
     public void init() {
@@ -95,9 +94,11 @@ public class FlywheelPIDFTuner extends OpMode {
 
         if (gamepad1.right_bumper && timer.milliseconds() > 300){
             targetVelocity += 20;
+            timer.reset();
         }
         if (gamepad2.left_bumper && timer.milliseconds() > 300) {
             targetVelocity -= 20;
+            timer.reset();
         }
 
         lastUp = gamepad1.dpad_up;
